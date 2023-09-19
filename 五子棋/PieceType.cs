@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace 五子棋
 {
     /// <summary>
-    /// 棋子種類: NON代表沒有棋子/RED代表提示子
+    /// Loại quân cờ: KHÔNG có nghĩa là không có quân cờ/ĐỎ có nghĩa là quân nhanh
     /// </summary>
     enum PieceType
     {

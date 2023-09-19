@@ -14,94 +14,94 @@ namespace 五子棋
     public partial class Form1 : Form
     {
         /// <summary>
-        /// 遊戲管理物件
+        /// Đối tượng quản lý trò chơi
         /// </summary>
         private GameManagement game = new GameManagement();
 
         /// <summary>
-        /// 初始畫面時form上的物件個數
+        /// Số lượng đối tượng trên biểu mẫu trong màn hình ban đầu
         /// </summary>
         private int ObjectCount = 4;
 
         /// <summary>
-        /// 紀錄當前棋子存在第幾個index
+        /// Ghi lại chỉ số tồn tại của quân cờ hiện tại
         /// </summary>
         private int PieceIndex = 0;
 
         /// <summary>
-        /// 出手時間
+        /// Thời gian bắn
         /// </summary>
         private string PlayerTime = "30";
 
         /// <summary>
-        /// 是否正在遊戲中
+        /// Bạn có tham gia trò chơi không?
         /// </summary>
         private bool IsOnGame = true;
 
-        //儲存遊戲中的每一步棋以讓之後可以觀看復盤
+        //Lưu lại mọi nước đi trong game để có thể xem lại sau
         private List<Piece> StoringForReviewGame = new List<Piece>();
-        
-        //復盤第幾步
+
+        //Các bước để xem xét là gì?
         private int Step = 0;
 
         /// <summary>
-        /// 畫面初始化
+        /// Khởi tạo màn hình
         /// </summary>
         public Form1()
         {
             InitializeComponent();
 
-            //棋子的index要從先加上form初始化物件個數
+            //Chỉ số của quân cờ phải được cộng thêm số đối tượng khởi tạo hình thức từ đầu.
             PieceIndex = ObjectCount;
 
-            //每1秒計時倒數
+            //Đếm ngược mỗi 1 giây
             CountingDown.Tick += new EventHandler(Counting_Down);
 
-            //每0.5秒復盤一子
+            //Xem lại sau mỗi 0,5 giây
             ReviewPiece.Tick += new EventHandler(Review_Piece);
         }
 
         /// <summary>
-        /// 滑鼠按下時產生棋子
+        /// Tạo quân cờ khi nhấn chuột
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e">落下座標</param>
         private void Form1_MouseDown(object sender, MouseEventArgs e)
         {
-            //游標目前位置若可以落子則回傳落子的真實座標，否則回傳null
+            //Nếu vị trí hiện tại của con trỏ có thể được di chuyển, tọa độ thực của việc di chuyển sẽ được trả về, nếu không sẽ trả về null.
             Piece piece = game.IsPlaceAPiece(e.X, e.Y);
 
             if (piece != null)
             {
                 if (game.IsFirst)
                 {
-                    //開局第一步
+                    //Bước đầu tiên trong trò chơi
                     this.Controls.Add(piece);
 
-                    //儲存下棋紀錄
+                    //Lưu kỷ lục cờ vua
                     StoringForReviewGame.Add(piece);
 
                     CountingDown.Start();
                 }
                 else if (game.IsRedHint)
                 {
-                    //任一回合兩顆棋子中的第一顆(紅色提示子)
+                    //Quân đầu tiên trong hai quân ở bất kỳ vòng nào (quân nhắc màu đỏ)
                     this.Controls.Add(piece);
 
                     PieceIndex++;
                 }
                 else
                 {
-                    //先將前一步紅色提示子刪除
+                    //Đầu tiên hãy xóa dấu nhắc màu đỏ ở bước trước
                     this.Controls.RemoveAt(PieceIndex);
 
-                    //再將棋替換為原先顏色的棋子
+                    //Sau đó thay quân cờ bằng quân màu ban đầu
                     this.Controls.Add(game.TempStorePiece);
 
-                    //第二顆子
+                    
                     this.Controls.Add(piece);
 
-                    //儲存下棋紀錄
+                    // Lưu kỷ lục cờ vua
                     StoringForReviewGame.Add(game.TempStorePiece);
                     StoringForReviewGame.Add(piece);
 
@@ -112,30 +112,30 @@ namespace 五子棋
                     CountingDown.Start();
                 }
 
-                //判斷是否勝利
+                // Đánh giá xem có chiến thắng không
                 if (game.Winner == PieceType.BLACK)
                 {
                     CountingDown.Stop();
 
-                    //若紅色提示子造成獲勝，需等待紅色提示子不見時才會宣布獲勝訊息
+                    // Nếu dấu nhắc màu đỏ mang lại chiến thắng, thông báo chiến thắng sẽ được thông báo sau khi dấu nhắc màu đỏ biến mất.
                     if (!game.IsRedHint)
                     {
-                        //黑方棋子種數
+                        //Số quân cờ đen
                         int blackToalPieces = (PieceIndex / 2) + 1;
 
                         if (blackToalPieces <= 20)
                         {
-                            MessageBox.Show("黑方瞬殺 \n\"20步內白方陣亡\"", "黑方勝利", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show("Tiêu diệt ngay lập tức của Đen\n\"Trắng bị giết trong vòng 20 nước đi\"", "Đen thắng", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                         else if (blackToalPieces > 20 && blackToalPieces <= 30)
                         {
-                            MessageBox.Show("黑方擊殺 \n\"30步內白方陣亡\"", "黑方勝利", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show("Đen giết \n\"Trắng chết trong vòng 30 nước đi\"", "Đen thắng", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                         else
                         {
-                            MessageBox.Show("黑方略勝一籌 \n\"白方撐過30步\"", "黑方勝利", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show("Đen nhỉnh hơn một chút \n\"Trắng sống sót sau 30 nước đi\"", "Đen thắng", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
-                        //遊戲結束
+                        //Trò chơi kết thúc
                         IsOnGame = false;
                     }
                 }
@@ -143,38 +143,38 @@ namespace 五子棋
                 {
                     CountingDown.Stop();
 
-                    //白方棋子種數
+                    //Số quân cờ trắng
                     int whiteToalPieces = (PieceIndex / 2) + 1;
 
                     if (!game.IsRedHint)
                     {
                         if (whiteToalPieces <= 20)
                         {
-                            MessageBox.Show("白方瞬殺 \n\"20步內黑方陣亡\"", "白方勝利", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show("Giết ngay lập tức\n\"Đen bị giết trong vòng 20 nước đi\"", "Trắng thắng", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                         else if (whiteToalPieces > 20 && whiteToalPieces <= 30)
                         {
-                            MessageBox.Show("白方擊殺 \n\"30步內黑方陣亡\"", "白方勝利", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show("Trắng giết \n\"Đen chết trong vòng 30 nước đi\"", "Trắng thắng", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                         else
                         {
-                            MessageBox.Show("白方略勝一籌 \n\"黑方撐過30步\"", "白方勝利", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show("Trắng nhỉnh hơn một chút \n\"Đen sống sót sau 30 nước đi\"", "Trắng thắng", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
-                        //遊戲結束
+                        //Trò chơi kết thúc
                         IsOnGame = false;
                     }
                 }
 
                 if (IsOnGame)
                 {
-                    //判斷下一輪要換誰下
+                    //Xác định ai sẽ thay thế ở vòng tiếp theo
                     game.ChangeWhoRule();
                 }
             }
         }
 
         /// <summary>
-        /// 倒數計時
+        /// đếm ngược
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -184,17 +184,17 @@ namespace 五子棋
             {
                 CountingDown.Stop();
 
-                //判斷哪一方超時
+                //Xác định bên nào đã hết thời gian chờ
                 if (game.CurrentPlayer == PieceType.BLACK)
                 {
-                    MessageBox.Show("黑方超時", "白方勝利", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Đen đã hết thời gian"," Trắng thắng", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else if (game.CurrentPlayer == PieceType.WHITE)
                 {
-                    MessageBox.Show("白方超時", "黑方勝利", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Trắng đã hết thời gian", "Đen thắng", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
 
-                //遊戲結束
+                //Trò chơi kết thúc
                 IsOnGame = false;
             }
             else if (TotalTime.Text != "0")
@@ -204,7 +204,7 @@ namespace 五子棋
         }
 
         /// <summary>
-        /// 播放上一盤的每步棋子
+        /// Chơi từng nước đi từ ván trước
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -229,14 +229,14 @@ namespace 五子棋
         }
 
         /// <summary>
-        /// 刪除棋盤棋子並重新產一盤新棋局
+        /// Xóa các quân cờ khỏi bàn cờ và tạo một ván cờ mới
         /// </summary>
         private void UpdatingGame()
         {
             CountingDown.Stop();
             ReviewPiece.Stop();
 
-            //清空棋子重新開始(count 0 是倒數計時物件 count 1 是label物件 count 2 3是button物件)
+            // Xóa quân cờ và bắt đầu lại (đếm 0 là đối tượng đếm ngược, đếm 1 là đối tượng nhãn, đếm 2 và 3 là đối tượng nút)
             int count = ObjectCount;
             while (count <= PieceIndex)
             {
@@ -251,15 +251,15 @@ namespace 五子棋
         }
 
         /// <summary>
-        /// 當游標移動到交叉點時將游標轉為手指符號
+        ///Biến con trỏ thành biểu tượng ngón tay khi di chuyển đến giao lộ
         /// </summary>
         /// <param name="sender"></param>
-        /// <param name="e">游標目前座標</param>
+        /// <param name="e">Tọa độ hiện tại của con trỏ</param>
         private void Form1_MouseMove(object sender, MouseEventArgs e)
         {
             //textBox1.Text = $"x:{e.X}y:{e.Y}";
 
-            //判斷是否轉為手指游標
+            //Xác định có chuyển đổi sang con trỏ ngón tay hay không
             if (game.CanBePlace(e.X, e.Y))
             {
                 this.Cursor = Cursors.Hand;
@@ -271,7 +271,7 @@ namespace 五子棋
         }
 
         /// <summary>
-        /// 開啟新的一局
+        /// Bắt đầu một trò chơi mới
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -279,29 +279,29 @@ namespace 五子棋
         {
             if(StoringForReviewGame.Count != 0)
             {
-                //更新棋盤
+                //Bảng cập nhật
                 UpdatingGame();
 
-                //清空儲存遊戲下棋紀錄的容器
+                //Xóa vùng chứa hồ sơ chơi trò chơi
                 StoringForReviewGame.Clear();
 
-                //遊戲進行中
+                //Trò chơi đang diễn ra
                 IsOnGame = true;
             }
             else
             {
-                MessageBox.Show("已為最新棋局", "訊息", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Đã là ván cờ mới nhất", "Tin nhắn", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }            
         }
 
         /// <summary>
-        /// 開始重播復盤
+        /// Bắt đầu xem lại phát lại
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void ReviewLastGame_Click(object sender, EventArgs e)
         {
-            //遊戲結束才能觀看復盤
+            //Bạn có thể xem đánh giá sau khi trò chơi kết thúc
             if (!IsOnGame)
             {
                 UpdatingGame();
@@ -309,8 +309,18 @@ namespace 五子棋
             }
             else
             {
-                MessageBox.Show("正在遊戲中，無法復盤!", "警告訊息", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Trong trò chơi, không thể tiếp tục!", "Thông báo cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void TotalTime_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

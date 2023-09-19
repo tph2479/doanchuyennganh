@@ -60,13 +60,14 @@ namespace 五子棋
             // 
             this.TotalTime.AutoSize = true;
             this.TotalTime.BackColor = System.Drawing.Color.Yellow;
-            this.TotalTime.Font = new System.Drawing.Font("新細明體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.TotalTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.TotalTime.ForeColor = System.Drawing.Color.Red;
             this.TotalTime.Location = new System.Drawing.Point(532, 67);
             this.TotalTime.Name = "TotalTime";
-            this.TotalTime.Size = new System.Drawing.Size(24, 18);
+            this.TotalTime.Size = new System.Drawing.Size(21, 15);
             this.TotalTime.TabIndex = 1;
             this.TotalTime.Text = "30";
+            this.TotalTime.Click += new System.EventHandler(this.TotalTime_Click);
             // 
             // RestartGame
             // 
@@ -74,7 +75,7 @@ namespace 五子棋
             this.RestartGame.FlatAppearance.MouseDownBackColor = System.Drawing.Color.White;
             this.RestartGame.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gold;
             this.RestartGame.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.RestartGame.Font = new System.Drawing.Font("標楷體", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.RestartGame.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.RestartGame.ForeColor = System.Drawing.Color.Red;
             this.RestartGame.Location = new System.Drawing.Point(584, 813);
             this.RestartGame.Name = "RestartGame";
@@ -90,7 +91,7 @@ namespace 五子棋
             this.ReviewLastGame.FlatAppearance.MouseDownBackColor = System.Drawing.Color.White;
             this.ReviewLastGame.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gold;
             this.ReviewLastGame.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ReviewLastGame.Font = new System.Drawing.Font("標楷體", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.ReviewLastGame.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.ReviewLastGame.ForeColor = System.Drawing.Color.Red;
             this.ReviewLastGame.Location = new System.Drawing.Point(360, 813);
             this.ReviewLastGame.Name = "ReviewLastGame";
@@ -111,7 +112,7 @@ namespace 五子棋
             this.BackColor = System.Drawing.SystemColors.ActiveBorder;
             this.BackgroundImage = global::五子棋.Properties.Resources.NewBoard;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(1078, 894);
+            this.ClientSize = new System.Drawing.Size(1078, 749);
             this.Controls.Add(this.ReviewLastGame);
             this.Controls.Add(this.RestartGame);
             this.Controls.Add(this.TotalTime);
@@ -122,6 +123,7 @@ namespace 五子棋
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "六道茶棧";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseDown);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseMove);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();

@@ -9,7 +9,7 @@ namespace 五子棋
     static class Program
     {
         /// <summary>
-        /// 應用程式的主要進入點。
+        /// Màn Hình Chính  của ứng dụng.
         /// </summary>
         [STAThread]
         static void Main()

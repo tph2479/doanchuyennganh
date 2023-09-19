@@ -9,47 +9,47 @@ using System.Drawing;
 namespace 五子棋
 {
     /// <summary>
-    /// 棋子
+    /// Piece
     /// </summary>
     abstract class Piece : PictureBox
     {
-        //棋子的邊長
+        //độ dài cạnh của quân cờ
         private static int IMAGE_WIDTH ;
 
         /// <summary>
-        /// 棋子基本設定
+        /// Các thiết lập cơ bản của quân cờ
         /// </summary>
-        /// <param name="x">滑鼠游標點擊時的x座標</param>
-        /// <param name="y">滑鼠游標點擊時的y座標</param>
+        /// <param name="x">Tọa độ x khi nhấn con trỏ chuột</param>
+        /// <param name="y">Tọa độ y khi nhấn con trỏ chuột</param>
         public Piece(int x, int y, bool IsRedHint)
         {
-            //更改棋子大小
-            if(IsRedHint)
+            //Thay đổi kích thước quân cờ
+            if (IsRedHint)
             {
-                //紅色提示子大小
+                // Kích thước phụ của dấu nhắc màu đỏ
                 IMAGE_WIDTH = 26;
             }
             else
             {
-                //黑白棋大小
+                //Kích thước Othello
                 IMAGE_WIDTH = 36;
             }
 
-            //讓棋子背景顏色為透明
+            // Làm màu nền của quân cờ trong suốt
             this.BackColor = Color.Transparent;
 
-            //讓棋子圖片依原比例來放大或縮小
+            //Cho hình quân cờ được phóng to hoặc thu nhỏ theo tỷ lệ ban đầu
             this.SizeMode = PictureBoxSizeMode.StretchImage;
 
-            //棋子出現的位置座標
+            //Vị trí tọa độ nơi quân cờ xuất hiện
             this.Location =  new Point(x - IMAGE_WIDTH/2, y - IMAGE_WIDTH / 2);
 
-            //棋子大小
+            //kích thước quân cờ
             this.Size = new Size(IMAGE_WIDTH, IMAGE_WIDTH);
         }
 
         /// <summary>
-        /// 問子類別這顆棋子是黑色還是白色
+        /// Hỏi danh mục con xem tác phẩm này có màu đen hay trắng
         /// </summary>
         /// <returns></returns>
         public abstract PieceType GetPieceType();

@@ -7,27 +7,27 @@ using System.Threading.Tasks;
 namespace 五子棋
 {
     /// <summary>
-    /// 遊戲管理物件
+    /// Đối tượng quản lý trò chơi
     /// </summary>
     class GameManagement
     {
         /// <summary>
-        /// 棋盤物件
+        /// Đối tượng bàn cờ
         /// </summary>
         public Board Board = new Board();
 
         /// <summary>
-        /// 1 代表黑或白方第一步 / 2 代表黑或白方第二步
+        /// 1 tượng trưng cho bước đầu tiên của Đen hoặc Trắng / 2 tượng trưng cho bước thứ hai của Đen hoặc Trắng
         /// </summary>
         private int NumStep = 1;
 
         /// <summary>
-        /// 判斷是否為第一步
+        /// Xác định xem đây có phải là bước đầu tiên
         /// </summary>
         public bool IsFirst = true;
 
         /// <summary>
-        /// 當前出手方
+        /// Người Chơi hiện tại
         /// </summary>
         public PieceType CurrentPlayer = PieceType.BLACK;
 
@@ -35,24 +35,24 @@ namespace 五子棋
    
         public Piece TempStorePiece = null;
         /// <summary>
-        /// 玩家所下的棋子是否變成提示子
+        /// Liệu quân cờ do người chơi chơi có trở thành quân nhắc nhở hay không
         /// </summary>
         public bool IsRedHint = false;
         /// <summary>
-        /// 哪種棋子勝利
+        /// Quân nào thắng
         /// </summary>
         private PieceType WinnerType = PieceType.NON;
 
         /// <summary>
-        /// 讓外部取得遊戲勝利資訊
+        /// Hãy để người ngoài có được thông tin chiến thắng trò chơi
         /// </summary>
         public PieceType Winner { get { return WinnerType; } }
 
         /// <summary>
-        /// 判斷此游標位置是否是在可落子範圍
+        /// Xác định xem vị trí con trỏ có nằm trong phạm vi có thể thả hay không
         /// </summary>
-        /// <param name="x">游標目前x座標</param>
-        /// <param name="y">游標目前y座標</param>
+        /// <param name="x">Tọa độ x hiện tại của con trỏ</param>
+        /// <param name="y">Tọa độ y hiện tại của con trỏ</param>
         /// <returns>是或否</returns>
         public bool CanBePlace(int x, int y)
         {
@@ -60,12 +60,12 @@ namespace 五子棋
         }
 
         /// <summary>
-        /// 判斷是否可以放置一顆棋子
+        /// Xác định xem có thể đặt quân cờ hay không
         /// </summary>
-        /// <param name="x">游標目前x座標</param>
-        /// <param name="y">游標目前y座標</param>
-        /// <param name="type">輪到當前玩家落子的棋子顏色</param>
-        /// <returns>若無其他棋子則傳回該位置的真實座標，否則回傳null</returns>
+        /// <param name="x">Tọa độ x hiện tại của con trỏ</param>
+        /// <param name="y">Tọa độ y hiện tại của con trỏ</param>
+        /// <param name="type">Màu của quân cờ khi đến lượt người chơi hiện tại.</param>
+        /// <returns>Nếu không còn quân cờ nào khác thì tọa độ thực của thế cờ sẽ được trả về.，Nếu không thì quay lại null</returns>
         public Piece IsPlaceAPiece(int x, int y)
         {
             Piece piece = Board.PlaceAPiece(x, y, CurrentPlayer, IsRedHint);
@@ -74,12 +74,12 @@ namespace 五子棋
             {
                 if (IsRedHint)
                 {
-                    //將此步本來的棋子先暫存起來
+                    //Lưu tạm quân cờ gốc cho nước đi này
                     TempStorePiece = piece;
 
                     CheckWinner();
 
-                    //回傳紅色提示子
+                    //Trả lại dấu nhắc màu đỏ
                     return Board.RedHintPiece;
                 }
                 CheckWinner();
@@ -89,11 +89,11 @@ namespace 五子棋
         }
 
         /// <summary>
-        /// 玩家出手交換
+        /// Trao đổi người chơi
         /// </summary>
         public void ChangeWhoRule()
         {
-            //六子棋規則
+            //Quy tắc sáu tiếng nổ
             if (IsFirst)
             {
                 IsFirst = false;
@@ -142,37 +142,37 @@ namespace 五子棋
         }
 
         /// <summary>
-        /// 檢查是否勝利
+        /// Kiểm tra xem chiến thắng
         /// </summary>
         private void CheckWinner()
         {
             int centerX = Board.LastPlacedNode.X;
             int centerY = Board.LastPlacedNode.Y;
 
-            //檢查八個方向有無連成六顆
+            //Kiểm tra xem có sáu kết nối theo tám hướng
             for (int dir_x = -1; dir_x <= 1; dir_x++)
             {
                 for (int dir_y = -1; dir_y <= 1; dir_y++)
                 {
-                    //排除將中心點也列入計算的情況
+                    //Loại trừ các điểm trung tâm khỏi việc đưa vào tính toán
                     if (dir_x == 0 && dir_y == 0)
                     {
                         continue;
                     }
 
-                    //紀錄現在看到幾顆相同的棋子
+                    //Ghi lại số lượng quân cờ giống hệt nhau mà bạn nhìn thấy bây giờ
                     int count = 1;
                     while (count < 6)
                     {
                         int target_x = centerX + count * dir_x;
                         int target_y = centerY + count * dir_y;
 
-                        //往中心點的某一方向檢查顏色是否相同.   
+                        //Kiểm tra xem các màu có giống nhau theo một hướng nhất định tính từ điểm trung tâm hay không.  
                         if (target_x < 0 || target_x > Board.NODE_COUNT ||
                             target_y < 0 || target_y > Board.NODE_COUNT ||
                             Board.GetPieceType(target_x, target_y) != CurrentPlayer)
                         {
-                            //往中心點的反方向檢查顏色是否相同
+                            //Kiểm tra xem các màu có giống nhau theo hướng ngược lại với điểm trung tâm không
                             while (count < 6)
                             {
                                 int newTarget_x = target_x + (count + 1) * dir_x * (-1);
@@ -181,19 +181,19 @@ namespace 五子棋
                                     target_y < 0 || target_y > Board.NODE_COUNT ||
                                     Board.GetPieceType(newTarget_x, newTarget_y) != CurrentPlayer)
                                 {
-                                    //中心點的反方向檢查完，並未連成六子
+                                    //Sau khi kiểm tra hướng ngược lại của điểm trung tâm, sáu mảnh không được kết nối.
                                     break;
                                 }
                                 count++;
                             }
 
-                            //中心點的正方向和反方向檢查完，並未連成六子
+                            //Sau khi kiểm tra hướng dương và hướng âm của điểm trung tâm, sáu mảnh không được kết nối.
                             break;
                         }
                         count++;
                     }
 
-                    //判斷勝利
+                    //Phán quyết chiến thắng
                     if (count == 6)
                     {
                         WinnerType = CurrentPlayer;

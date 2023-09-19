@@ -7,25 +7,25 @@ using System.Threading.Tasks;
 namespace 五子棋
 {
     /// <summary>
-    /// 設定白色棋子圖案
+    /// Bộ mẫu quân cờ trắng
     /// </summary>
     class WhitePiece : Piece
     {
         /// <summary>
-        /// 設定棋子圖案相關初始值
+        /// Đặt giá trị ban đầu liên quan đến mẫu quân cờ
         /// </summary>
-        /// <param name="x">要放置該棋子的x座標</param>
-        /// <param name="y">要放置該棋子的y座標</param>
+        /// <param name="x">Tọa độ x của quân cờ cần đặt</param>
+        /// <param name="y">Tọa độ y của quân cờ cần đặt</param>
         public WhitePiece(int x, int y) : base(x, y, false)
-        {            
-                //讀取白棋子的圖片
-                this.Image = Properties.Resources.white;
+        {
+            //Đọc hình ảnh quân cờ trắng
+            this.Image = Properties.Resources.white;
         }
 
         /// <summary>
-        /// 告訴父類別這顆子是白色的
+        /// Nói với danh mục phụ huynh rằng hạt này có màu trắng
         /// </summary>
-        /// <returns>白色</returns>
+        /// <returns>trắng</returns>
         public override PieceType GetPieceType()
         {
             return PieceType.WHITE;

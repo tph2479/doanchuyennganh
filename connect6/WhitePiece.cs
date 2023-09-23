@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace 五子棋
+namespace connect6
 {
     /// <summary>
     /// Bộ mẫu quân cờ trắng
@@ -23,7 +23,7 @@ namespace 五子棋
         }
 
         /// <summary>
-        /// Nói với danh mục phụ huynh rằng hạt này có màu trắng
+        /// Báo quân này màu trắng
         /// </summary>
         /// <returns>trắng</returns>
         public override PieceType GetPieceType()

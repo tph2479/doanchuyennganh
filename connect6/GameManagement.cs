@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace 五子棋
+namespace connect6
 {
     /// <summary>
     /// Đối tượng quản lý trò chơi
@@ -53,7 +53,7 @@ namespace 五子棋
         /// </summary>
         /// <param name="x">Tọa độ x hiện tại của con trỏ</param>
         /// <param name="y">Tọa độ y hiện tại của con trỏ</param>
-        /// <returns>是或否</returns>
+        /// <returns>Có hoặc không</returns>
         public bool CanBePlace(int x, int y)
         {
             return Board.CanBePlace(x, y);
@@ -128,7 +128,7 @@ namespace 五子棋
                     IsRedHint = true;
                 }
             }
-            //五子棋規則
+            //quy tắc
             //if(IsBlack)
             //{  
             //    IsBlack = false;

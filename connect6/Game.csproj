@@ -6,13 +6,28 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{288B015C-8EB8-4C5F-B7B2-EB82C9B4604F}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>五子棋</RootNamespace>
-    <AssemblyName>五子棋</AssemblyName>
+    <RootNamespace>connect6</RootNamespace>
+    <AssemblyName>connect6</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -35,6 +50,9 @@
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>connect6.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -101,25 +119,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\black.jfif" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\board.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\white.jpeg" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\black.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\white.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\black1.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\board1.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\board2.png" />
@@ -132,9 +135,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\board750.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\弓箭.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\red-point.png" />
@@ -173,10 +173,19 @@
     <None Include="Resources\CountdownFrame.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\水墨人物.png" />
+    <None Include="Resources\Man.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Man.png" />
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5.2 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

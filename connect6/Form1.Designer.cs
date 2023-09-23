@@ -1,5 +1,5 @@
 ﻿
-namespace 五子棋
+namespace connect6
 {
     partial class Form1
     {
@@ -110,7 +110,7 @@ namespace 五子棋
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.SystemColors.ActiveBorder;
-            this.BackgroundImage = global::五子棋.Properties.Resources.NewBoard;
+            this.BackgroundImage = global::connect6.Properties.Resources.NewBoard;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1078, 749);
             this.Controls.Add(this.ReviewLastGame);

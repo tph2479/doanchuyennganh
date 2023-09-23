@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 
-namespace 五子棋
+namespace connect6
 {
     /// <summary>
     /// chessboard

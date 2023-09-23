@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
 
-namespace 五子棋
+namespace connect6
 {
     public partial class Form1 : Form
     {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
 
-namespace 五子棋
+namespace connect6
 {
     /// <summary>
     /// Piece

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace 五子棋
+namespace connect6
 {
     /// <summary>
     /// nhắc nhở màu đỏ

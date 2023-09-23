@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 
 
-namespace 五子棋
+namespace connect6
 {
     /// <summary>
     /// 設定黑色棋子圖案

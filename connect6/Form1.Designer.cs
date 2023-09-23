@@ -38,6 +38,7 @@ namespace connect6
             this.RestartGame = new System.Windows.Forms.Button();
             this.ReviewLastGame = new System.Windows.Forms.Button();
             this.ReviewPiece = new System.Windows.Forms.Timer(this.components);
+            this.btnUndo = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -105,6 +106,16 @@ namespace connect6
             // 
             this.ReviewPiece.Interval = 1000;
             // 
+            // btnUndo
+            // 
+            this.btnUndo.Location = new System.Drawing.Point(43, 39);
+            this.btnUndo.Name = "btnUndo";
+            this.btnUndo.Size = new System.Drawing.Size(75, 23);
+            this.btnUndo.TabIndex = 3;
+            this.btnUndo.Text = "Undo";
+            this.btnUndo.UseVisualStyleBackColor = true;
+            this.btnUndo.Click += new System.EventHandler(this.btnUndo_Click);
+            // 
             // Form1
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -113,6 +124,7 @@ namespace connect6
             this.BackgroundImage = global::connect6.Properties.Resources.NewBoard;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1078, 749);
+            this.Controls.Add(this.btnUndo);
             this.Controls.Add(this.ReviewLastGame);
             this.Controls.Add(this.RestartGame);
             this.Controls.Add(this.TotalTime);
@@ -141,6 +153,7 @@ namespace connect6
         private System.Windows.Forms.Button RestartGame;
         private System.Windows.Forms.Button ReviewLastGame;
         private System.Windows.Forms.Timer ReviewPiece;
+        private System.Windows.Forms.Button btnUndo;
     }
 }
 

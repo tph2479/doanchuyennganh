@@ -17,6 +17,7 @@ namespace connect6
         /// Đối tượng quản lý trò chơi
         /// </summary>
         private GameManagement game = new GameManagement();
+      
 
         /// <summary>
         /// Số lượng đối tượng trên biểu mẫu trong màn hình ban đầu
@@ -40,7 +41,7 @@ namespace connect6
 
         //Lưu lại mọi nước đi trong game để có thể xem lại sau
         private List<Piece> StoringForReviewGame = new List<Piece>();
-
+       
         //Các bước để xem xét là gì?
         private int Step = 0;
 
@@ -70,9 +71,10 @@ namespace connect6
         {
             //Nếu vị trí hiện tại của con trỏ có thể được di chuyển, tọa độ thực của việc di chuyển sẽ được trả về, nếu không sẽ trả về null.
             Piece piece = game.IsPlaceAPiece(e.X, e.Y);
-
+ 
             if (piece != null)
             {
+                
                 if (game.IsFirst)
                 {
                     //Bước đầu tiên trong trò chơi
@@ -82,13 +84,15 @@ namespace connect6
                     StoringForReviewGame.Add(piece);
 
                     CountingDown.Start();
+                    this.Controls.RemoveAt(PieceIndex);  // Khải: Chỗ Này là để xóa Dấu nhắc đỏ ở nước vừa đi
+
                 }
                 else if (game.IsRedHint)
                 {
                     //Quân đầu tiên trong hai quân ở bất kỳ vòng nào (quân nhắc màu đỏ)
                     this.Controls.Add(piece);
-
                     PieceIndex++;
+                    game.IsRedHint = false;
                 }
                 else
                 {
@@ -320,6 +324,26 @@ namespace connect6
 
         private void TotalTime_Click(object sender, EventArgs e)
         {
+
+        }
+        //Dùng List StoringForReviewGame để truy xuất tới phần tử Cuối cùng và xóa Phần Tử cuối cùng
+        private void btnUndo_Click(object sender, EventArgs e)
+        {
+            if (StoringForReviewGame.Count > 0)
+            {
+                Piece lastpiece = StoringForReviewGame.Last();
+                this.Controls.Remove(lastpiece);
+                game.ChangeWhoRule();
+                PieceIndex--;
+                StoringForReviewGame.RemoveAt(StoringForReviewGame.Count - 1);
+                
+            }
+            else
+            {
+                MessageBox.Show("Không có nước đi để hoàn tác.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+
+
 
         }
     }

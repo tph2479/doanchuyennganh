@@ -23,7 +23,7 @@ namespace connect6
         }
 
         /// <summary>
-        /// Nói với danh mục phụ huynh rằng hạt này có màu trắng
+        /// Báo quân này màu trắng
         /// </summary>
         /// <returns>trắng</returns>
         public override PieceType GetPieceType()

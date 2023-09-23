@@ -53,7 +53,7 @@ namespace connect6
         /// </summary>
         /// <param name="x">Tọa độ x hiện tại của con trỏ</param>
         /// <param name="y">Tọa độ y hiện tại của con trỏ</param>
-        /// <returns>是或否</returns>
+        /// <returns>Có hoặc không</returns>
         public bool CanBePlace(int x, int y)
         {
             return Board.CanBePlace(x, y);
@@ -128,7 +128,7 @@ namespace connect6
                     IsRedHint = true;
                 }
             }
-            //五子棋規則
+            //quy tắc
             //if(IsBlack)
             //{  
             //    IsBlack = false;

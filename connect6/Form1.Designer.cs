@@ -81,7 +81,7 @@ namespace connect6
             this.RestartGame.Name = "RestartGame";
             this.RestartGame.Size = new System.Drawing.Size(150, 50);
             this.RestartGame.TabIndex = 2;
-            this.RestartGame.Text = "重新遊戲";
+            this.RestartGame.Text = "Restart";
             this.RestartGame.UseVisualStyleBackColor = false;
             this.RestartGame.Click += new System.EventHandler(this.RestartGame_Click);
             // 
@@ -97,7 +97,7 @@ namespace connect6
             this.ReviewLastGame.Name = "ReviewLastGame";
             this.ReviewLastGame.Size = new System.Drawing.Size(150, 50);
             this.ReviewLastGame.TabIndex = 2;
-            this.ReviewLastGame.Text = "觀看復盤";
+            this.ReviewLastGame.Text = "Review";
             this.ReviewLastGame.UseVisualStyleBackColor = false;
             this.ReviewLastGame.Click += new System.EventHandler(this.ReviewLastGame_Click);
             // 
@@ -122,7 +122,7 @@ namespace connect6
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "六道茶棧";
+            this.Text = "Connect 6";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseDown);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseMove);

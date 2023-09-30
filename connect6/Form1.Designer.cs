@@ -32,7 +32,6 @@ namespace connect6
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmGame));
             this.CountingDown = new System.Windows.Forms.Timer(this.components);
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.TotalTime = new System.Windows.Forms.Label();
             this.Animation = new System.Windows.Forms.Timer(this.components);
             this.RestartGame = new System.Windows.Forms.Button();
@@ -40,23 +39,13 @@ namespace connect6
             this.ReviewPiece = new System.Windows.Forms.Timer(this.components);
             this.buttonUndo = new Guna.UI2.WinForms.Guna2CircleButton();
             this.buttonRedo = new Guna.UI2.WinForms.Guna2CircleButton();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // CountingDown
             // 
             this.CountingDown.Interval = 1000;
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
-            this.pictureBox1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.BackgroundImage")));
-            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBox1.Location = new System.Drawing.Point(200, 62);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(688, 26);
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
             // 
             // TotalTime
             // 
@@ -109,6 +98,7 @@ namespace connect6
             // 
             // buttonUndo
             // 
+            this.buttonUndo.BackColor = System.Drawing.Color.DimGray;
             this.buttonUndo.BackgroundImage = global::connect6.Properties.Resources.BeautifulScene;
             this.buttonUndo.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
             this.buttonUndo.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
@@ -143,11 +133,22 @@ namespace connect6
             this.buttonRedo.Text = "Redo";
             this.buttonRedo.Click += new System.EventHandler(this.guna2CircleButton2_Click);
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
+            this.pictureBox1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.BackgroundImage")));
+            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox1.Location = new System.Drawing.Point(200, 62);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(688, 26);
+            this.pictureBox1.TabIndex = 0;
+            this.pictureBox1.TabStop = false;
+            // 
             // FrmGame
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.BackColor = System.Drawing.SystemColors.ActiveBorder;
+            this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.BackgroundImage = global::connect6.Properties.Resources.NewBoard;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1078, 749);
@@ -175,7 +176,6 @@ namespace connect6
         #endregion
 
         private System.Windows.Forms.Timer CountingDown;
-        private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label TotalTime;
         private System.Windows.Forms.Timer Animation;
         private System.Windows.Forms.Button RestartGame;
@@ -183,6 +183,7 @@ namespace connect6
         private System.Windows.Forms.Timer ReviewPiece;
         private Guna.UI2.WinForms.Guna2CircleButton buttonUndo;
         private Guna.UI2.WinForms.Guna2CircleButton buttonRedo;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }
 

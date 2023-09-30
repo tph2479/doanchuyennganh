@@ -370,6 +370,7 @@ namespace connect6
                 this.Controls.Add(redoPiece);
                 game.ChangeWhoRule();
                 PieceIndex++;
+                StoringForReviewGame.Add(redoPiece);
                 RedoMoves.RemoveAt(RedoMoves.Count - 1);
 
             }

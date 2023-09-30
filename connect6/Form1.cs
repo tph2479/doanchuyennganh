@@ -11,7 +11,7 @@ using System.Threading;
 
 namespace connect6
 {
-    public partial class Form1 : Form
+    public partial class FrmGame : Form
     {
         /// <summary>
         /// Đối tượng quản lý trò chơi
@@ -38,9 +38,11 @@ namespace connect6
         /// Bạn có tham gia trò chơi không?
         /// </summary>
         private bool IsOnGame = true;
-
+      
         //Lưu lại mọi nước đi trong game để có thể xem lại sau
         private List<Piece> StoringForReviewGame = new List<Piece>();
+        //Lưu lại các nước đi sau khi undo
+        private List<Piece> RedoMoves = new List<Piece>();
        
         //Các bước để xem xét là gì?
         private int Step = 0;
@@ -48,7 +50,7 @@ namespace connect6
         /// <summary>
         /// Khởi tạo màn hình
         /// </summary>
-        public Form1()
+        public FrmGame()
         {
             InitializeComponent();
 
@@ -60,32 +62,43 @@ namespace connect6
 
             //Xem lại sau mỗi 0,5 giây
             ReviewPiece.Tick += new EventHandler(Review_Piece);
+           
         }
-
-        /// <summary>
-        /// Tạo quân cờ khi nhấn chuột
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e">落下座標</param>
-        private void Form1_MouseDown(object sender, MouseEventArgs e)
+     
+            /// <summary>
+            /// Tạo quân cờ khi nhấn chuột
+            /// </summary>
+            /// <param name="sender"></param>
+            /// <param name="e">落下座標</param>
+            private void Form1_MouseDown(object sender, MouseEventArgs e)
         {
+             
+               
             //Nếu vị trí hiện tại của con trỏ có thể được di chuyển, tọa độ thực của việc di chuyển sẽ được trả về, nếu không sẽ trả về null.
-            Piece piece = game.IsPlaceAPiece(e.X, e.Y);
- 
+           Piece piece = game.IsPlaceAPiece(e.X, e.Y);
+            if (IsOnGame == false)
+            {
+                return;
+            }
+           
             if (piece != null)
             {
-                
+                this.Controls.Add(pictureBox1);
                 if (game.IsFirst)
                 {
+                    
                     //Bước đầu tiên trong trò chơi
                     this.Controls.Add(piece);
-
                     //Lưu kỷ lục cờ vua
-                    StoringForReviewGame.Add(piece);
-
+                    if (!game.IsRedHint)
+                    {
+                        StoringForReviewGame.Add(piece);
+                        this.Controls.RemoveAt(PieceIndex);
+                        
+                    }
                     CountingDown.Start();
-                    this.Controls.RemoveAt(PieceIndex);  // Khải: Chỗ Này là để xóa Dấu nhắc đỏ ở nước vừa đi
-
+                  //  this.Controls.Add(TotalTime);
+                   // this.Controls.RemoveAt(PieceIndex);  // Khải: Chỗ Này là để xóa Dấu nhắc đỏ ở nước vừa đi
                 }
                 else if (game.IsRedHint)
                 {
@@ -93,22 +106,25 @@ namespace connect6
                     this.Controls.Add(piece);
                     PieceIndex++;
                     game.IsRedHint = false;
+                    this.Controls.Add(TotalTime);
+                    this.Controls.RemoveAt(PieceIndex);
                 }
                 else
                 {
                     //Đầu tiên hãy xóa dấu nhắc màu đỏ ở bước trước
                     this.Controls.RemoveAt(PieceIndex);
-
+                    Piece originalpiece = game.TempStorePiece;
                     //Sau đó thay quân cờ bằng quân màu ban đầu
-                    this.Controls.Add(game.TempStorePiece);
+                    this.Controls.Add(originalpiece);
 
-                    
+    
                     this.Controls.Add(piece);
-
+                    if (!game.IsRedHint)
+                    {
+                        StoringForReviewGame.Add(originalpiece);
+                        StoringForReviewGame.Add(piece);
+                    }
                     // Lưu kỷ lục cờ vua
-                    StoringForReviewGame.Add(game.TempStorePiece);
-                    StoringForReviewGame.Add(piece);
-
                     PieceIndex++;
 
                     CountingDown.Stop();
@@ -175,6 +191,7 @@ namespace connect6
                     game.ChangeWhoRule();
                 }
             }
+         
         }
 
         /// <summary>
@@ -203,7 +220,7 @@ namespace connect6
             }
             else if (TotalTime.Text != "0")
             {
-                TotalTime.Text = Convert.ToString(Convert.ToInt32(TotalTime.Text) - 1);
+                TotalTime.Text = Convert.ToString(Convert.ToInt32(TotalTime.Text) - 1).ToString();
             }
         }
 
@@ -319,7 +336,7 @@ namespace connect6
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+           
         }
 
         private void TotalTime_Click(object sender, EventArgs e)
@@ -327,7 +344,7 @@ namespace connect6
 
         }
         //Dùng List StoringForReviewGame để truy xuất tới phần tử Cuối cùng và xóa Phần Tử cuối cùng
-        private void btnUndo_Click(object sender, EventArgs e)
+        private void guna2CircleButton1_Click(object sender, EventArgs e)
         {
             if (StoringForReviewGame.Count > 0)
             {
@@ -335,16 +352,31 @@ namespace connect6
                 this.Controls.Remove(lastpiece);
                 game.ChangeWhoRule();
                 PieceIndex--;
+                RedoMoves.Add(lastpiece);
                 StoringForReviewGame.RemoveAt(StoringForReviewGame.Count - 1);
-                
+
             }
             else
             {
                 MessageBox.Show("Không có nước đi để hoàn tác.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+        }
 
+        private void guna2CircleButton2_Click(object sender, EventArgs e)
+        {
+            if (RedoMoves.Count > 0)
+            {
+                Piece redoPiece = RedoMoves.Last();
+                this.Controls.Add(redoPiece);
+                game.ChangeWhoRule();
+                PieceIndex++;
+                RedoMoves.RemoveAt(RedoMoves.Count - 1);
 
-
+            }
+            else
+            {
+                MessageBox.Show("Không có nước đi để phục hồi.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
     }
 }

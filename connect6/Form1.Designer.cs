@@ -1,7 +1,7 @@
 ﻿
 namespace connect6
 {
-    partial class Form1
+    partial class FrmGame
     {
         /// <summary>
         /// 設計工具所需的變數。
@@ -30,7 +30,7 @@ namespace connect6
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmGame));
             this.CountingDown = new System.Windows.Forms.Timer(this.components);
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.TotalTime = new System.Windows.Forms.Label();
@@ -38,7 +38,8 @@ namespace connect6
             this.RestartGame = new System.Windows.Forms.Button();
             this.ReviewLastGame = new System.Windows.Forms.Button();
             this.ReviewPiece = new System.Windows.Forms.Timer(this.components);
-            this.btnUndo = new System.Windows.Forms.Button();
+            this.buttonUndo = new Guna.UI2.WinForms.Guna2CircleButton();
+            this.buttonRedo = new Guna.UI2.WinForms.Guna2CircleButton();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -106,17 +107,43 @@ namespace connect6
             // 
             this.ReviewPiece.Interval = 1000;
             // 
-            // btnUndo
+            // buttonUndo
             // 
-            this.btnUndo.Location = new System.Drawing.Point(43, 39);
-            this.btnUndo.Name = "btnUndo";
-            this.btnUndo.Size = new System.Drawing.Size(75, 23);
-            this.btnUndo.TabIndex = 3;
-            this.btnUndo.Text = "Undo";
-            this.btnUndo.UseVisualStyleBackColor = true;
-            this.btnUndo.Click += new System.EventHandler(this.btnUndo_Click);
+            this.buttonUndo.BackgroundImage = global::connect6.Properties.Resources.BeautifulScene;
+            this.buttonUndo.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
+            this.buttonUndo.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
+            this.buttonUndo.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
+            this.buttonUndo.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
+            this.buttonUndo.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.buttonUndo.Font = new System.Drawing.Font("Sitka Text", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonUndo.ForeColor = System.Drawing.Color.White;
+            this.buttonUndo.Location = new System.Drawing.Point(3, 2);
+            this.buttonUndo.Name = "buttonUndo";
+            this.buttonUndo.ShadowDecoration.Mode = Guna.UI2.WinForms.Enums.ShadowMode.Circle;
+            this.buttonUndo.Size = new System.Drawing.Size(133, 44);
+            this.buttonUndo.TabIndex = 5;
+            this.buttonUndo.Text = "Undo";
+            this.buttonUndo.Click += new System.EventHandler(this.guna2CircleButton1_Click);
             // 
-            // Form1
+            // buttonRedo
+            // 
+            this.buttonRedo.BackgroundImage = global::connect6.Properties.Resources.BeautifulScene;
+            this.buttonRedo.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
+            this.buttonRedo.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
+            this.buttonRedo.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
+            this.buttonRedo.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
+            this.buttonRedo.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.buttonRedo.Font = new System.Drawing.Font("Sitka Text", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonRedo.ForeColor = System.Drawing.Color.White;
+            this.buttonRedo.Location = new System.Drawing.Point(133, 2);
+            this.buttonRedo.Name = "buttonRedo";
+            this.buttonRedo.ShadowDecoration.Mode = Guna.UI2.WinForms.Enums.ShadowMode.Circle;
+            this.buttonRedo.Size = new System.Drawing.Size(122, 44);
+            this.buttonRedo.TabIndex = 6;
+            this.buttonRedo.Text = "Redo";
+            this.buttonRedo.Click += new System.EventHandler(this.guna2CircleButton2_Click);
+            // 
+            // FrmGame
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
@@ -124,7 +151,8 @@ namespace connect6
             this.BackgroundImage = global::connect6.Properties.Resources.NewBoard;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1078, 749);
-            this.Controls.Add(this.btnUndo);
+            this.Controls.Add(this.buttonRedo);
+            this.Controls.Add(this.buttonUndo);
             this.Controls.Add(this.ReviewLastGame);
             this.Controls.Add(this.RestartGame);
             this.Controls.Add(this.TotalTime);
@@ -132,7 +160,7 @@ namespace connect6
             this.DoubleBuffered = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.Name = "Form1";
+            this.Name = "FrmGame";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Connect 6";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -153,7 +181,8 @@ namespace connect6
         private System.Windows.Forms.Button RestartGame;
         private System.Windows.Forms.Button ReviewLastGame;
         private System.Windows.Forms.Timer ReviewPiece;
-        private System.Windows.Forms.Button btnUndo;
+        private Guna.UI2.WinForms.Guna2CircleButton buttonUndo;
+        private Guna.UI2.WinForms.Guna2CircleButton buttonRedo;
     }
 }
 

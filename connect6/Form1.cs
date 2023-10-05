@@ -17,7 +17,8 @@ namespace connect6
         /// Đối tượng quản lý trò chơi
         /// </summary>
         private GameManagement game = new GameManagement();
-      
+        private Board board = new Board();
+        private ComputerPlayer computerPlayer;
 
         /// <summary>
         /// Số lượng đối tượng trên biểu mẫu trong màn hình ban đầu
@@ -56,6 +57,7 @@ namespace connect6
 
             //Chỉ số của quân cờ phải được cộng thêm số đối tượng khởi tạo hình thức từ đầu.
             PieceIndex = ObjectCount;
+            computerPlayer = new ComputerPlayer(game, board);
 
             //Đếm ngược mỗi 1 giây
             CountingDown.Tick += new EventHandler(Counting_Down);
@@ -259,11 +261,12 @@ namespace connect6
 
             // Xóa quân cờ và bắt đầu lại (đếm 0 là đối tượng đếm ngược, đếm 1 là đối tượng nhãn, đếm 2 và 3 là đối tượng nút)
             int count = ObjectCount;
-            while (count <= PieceIndex)
-            {
-                this.Controls.RemoveAt(4);
+            foreach(var piece in StoringForReviewGame)
+            {  
+             this.Controls.Remove(piece);
                 count++;
             }
+          
 
             game = new GameManagement();
             TotalTime.Text = PlayerTime;
@@ -315,6 +318,8 @@ namespace connect6
             }            
         }
 
+
+
         /// <summary>
         /// Bắt đầu xem lại phát lại
         /// </summary>
@@ -333,6 +338,13 @@ namespace connect6
                 MessageBox.Show("Trong trò chơi, không thể tiếp tục!", "Thông báo cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
+        private void SaveGame()
+        {
+           foreach(var item in StoringForReviewGame)
+            {
+
+            }
+        }
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -344,7 +356,51 @@ namespace connect6
 
         }
         //Dùng List StoringForReviewGame để truy xuất tới phần tử Cuối cùng và xóa Phần Tử cuối cùng
-        private void guna2CircleButton1_Click(object sender, EventArgs e)
+       
+        private void guna2CircleButton2_Click(object sender, EventArgs e)
+        {
+            if (RedoMoves.Count > 0)
+            {
+                Piece redoPiece = RedoMoves.Last();
+                this.Controls.Add(redoPiece);
+                game.ChangeWhoRule();
+                PieceIndex++;
+                StoringForReviewGame.Add(redoPiece);
+                RedoMoves.RemoveAt(RedoMoves.Count - 1);
+
+            }
+            else
+            {
+                MessageBox.Show("Không có nước đi để phục hồi.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+        
+        
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnPVsC_Click(object sender, EventArgs e)
+        {
+
+            computerPlayer.GetPossibleMoves();
+            computerPlayer.MakeMove();
+            int x = 19;
+            int y = 19;
+            Piece piece = game.IsPlaceAPiece(x, y);
+            if (piece != null)
+            {
+                // Cập nhật trạng thái của trò chơi
+                // Ví dụ: bạn có thể kiểm tra chiến thắng, thay đổi người chơi hiện tại, v.v.
+                game.ChangeWhoRule();
+                UpdatingGame();
+                IsOnGame = true;
+                // Vẽ lại bàn cờ sau nước đi tốt nhất
+             }
+        }
+
+        private void btnUndo_Click(object sender, EventArgs e)
         {
             if (StoringForReviewGame.Count > 0)
             {
@@ -362,7 +418,7 @@ namespace connect6
             }
         }
 
-        private void guna2CircleButton2_Click(object sender, EventArgs e)
+        private void btnRedo_Click(object sender, EventArgs e)
         {
             if (RedoMoves.Count > 0)
             {
@@ -377,6 +433,26 @@ namespace connect6
             else
             {
                 MessageBox.Show("Không có nước đi để phục hồi.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void btnNewgame_Click(object sender, EventArgs e)
+        {
+            if (StoringForReviewGame.Count != 0)
+            {
+                Piece restartpiece = game.IsPlaceAPiece(0, 0);
+                if (restartpiece != null)
+                {
+                    StoringForReviewGame.Add(restartpiece);
+                }
+                UpdatingGame();
+                StoringForReviewGame.Clear();
+                IsOnGame = true;
+
+            }
+            else
+            {
+                MessageBox.Show("Đã là ván cờ mới nhất", "Tin nhắn", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
     }

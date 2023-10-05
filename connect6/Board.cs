@@ -12,10 +12,20 @@ namespace connect6
     /// </summary>
     class Board
     {
+        public Board board;
+        public Board()
+        {
+
+        }
+        public Board(Board Board)
+        {
+            board = Board;
+        }
         /// <summary>
         /// coordinates not on point
         /// </summary>
         private static readonly Point NO_MATCH_NODE = new Point(-1, -1);
+        private List<Piece> pieces = new List<Piece>();
 
         /// <summary>
         /// The maximum relative coordinates of chessboard points x and y are 18 (0~18)
@@ -191,7 +201,6 @@ namespace connect6
             //Hãy nhập chính xác khoảng cách giữa các điểm vào đây, nếu không tọa độ tính toán sẽ có “lỗi rất lớn”"
             double node_Distance_x = 37.611;
             double node_Distance_y = 37.666;
-
             Point pieceRealFormPos = new Point();
             pieceRealFormPos.X = Convert.ToInt32((nodePos.X * node_Distance_x) + OFFSET_X);
             pieceRealFormPos.Y = Convert.ToInt32((nodePos.Y * node_Distance_y) + OFFSET_Y);
@@ -269,5 +278,143 @@ namespace connect6
                 }
             }
         }
+        public int CountPieces(PieceType playerType)
+        {
+            int count = 0;
+
+            foreach (Piece piece in pieces)
+            {
+                if (piece.GetPieceType() == playerType)
+                {
+                    count++;
+                }
+            }
+
+            return count;
+        }
+        public int CalculateCombos(Board board, PieceType playerType)
+        {
+            int comboCount = 0;
+
+            // Kiểm tra hàng ngang
+            for (int row = 0; row < 19; row++)
+            {
+                int consecutiveCount = 0;
+                for (int col = 0; col < 19; col++)
+                {
+                    if (board.GetPieceType(col, row) == playerType)
+                    {
+                        consecutiveCount++;
+                        if (consecutiveCount == 6)
+                        {
+                            comboCount++;
+                            break; // Đã tìm thấy combo, thoát vòng lặp
+                        }
+                    }
+                    else
+                    {
+                        consecutiveCount = 0;
+                    }
+                }
+            }
+
+            // Kiểm tra hàng dọc
+            for (int col = 0; col < 19; col++)
+            {
+                int consecutiveCount = 0;
+                for (int row = 0; row < 19; row++)
+                {
+                    if (board.GetPieceType(col, row) == playerType)
+                    {
+                        consecutiveCount++;
+                        if (consecutiveCount == 6)
+                        {
+                            comboCount++;
+                            break; // Đã tìm thấy combo, thoát vòng lặp
+                        }
+                    }
+                    else
+                    {
+                        consecutiveCount = 0;
+                    }
+                }
+            }
+
+            // Kiểm tra hàng chéo từ trái trên đến phải dưới
+            for (int row = 0; row <= 19; row++)
+            {
+                for (int col = 0; col <= 19; col++)
+                {
+                    int consecutiveCount = 0;
+                    for (int i = 0; i < 6; i++)
+                    {
+                        if (board.GetPieceType(col + i, row + i) == playerType)
+                        {
+                            consecutiveCount++;
+                            if (consecutiveCount == 6)
+                            {
+                                comboCount++;
+                                break; // Đã tìm thấy combo, thoát vòng lặp
+                            }
+                        }
+                        else
+                        {
+                            consecutiveCount = 0;
+                        }
+                    }
+                }
+            }
+
+            // Kiểm tra hàng chéo từ trái dưới đến phải trên
+            for (int row = 5; row < 19; row++)
+            {
+                for (int col = 0; col <= 19; col++)
+                {
+                    int consecutiveCount = 0;
+                    for (int i = 0; i < 6; i++)
+                    {
+                        if (board.GetPieceType(col + i, row - i) == playerType)
+                        {
+                            consecutiveCount++;
+                            if (consecutiveCount == 6)
+                            {
+                                comboCount++;
+                                break; // Đã tìm thấy combo, thoát vòng lặp
+                            }
+                        }
+                        else
+                        {
+                            consecutiveCount = 0;
+                        }
+                    }
+                }
+            }
+
+            return comboCount;
+        }
+        public int CalculatePosition(Board board, PieceType playerType)
+        {
+            int positionScore = 0;
+         
+            // Lặp qua các ô trên bàn cờ và tính điểm cho từng ô
+            for (int x = 0; x < 19; x++)
+            {
+                for (int y = 0; y < 19; y++)
+                {
+                    int centerScore = Math.Abs(19 / 2 - x) + Math.Abs(19 / 2 - y);
+                    int edgeScore = Math.Min(x, y);
+                    // Kiểm tra nếu ô đó thuộc về người chơi playerType
+                    if (board.GetPieceType(x, y) == playerType)
+                    {
+                        // Tính điểm cho vị trí này và cộng vào tổng điểm
+                        int positionScoreForCell = centerScore-edgeScore;
+                        positionScore += positionScoreForCell;
+                    }
+                }
+            }
+
+            return positionScore;
+        }
+
     }
 }

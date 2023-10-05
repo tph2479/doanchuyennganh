@@ -37,10 +37,15 @@ namespace connect6
             this.RestartGame = new System.Windows.Forms.Button();
             this.ReviewLastGame = new System.Windows.Forms.Button();
             this.ReviewPiece = new System.Windows.Forms.Timer(this.components);
-            this.buttonUndo = new Guna.UI2.WinForms.Guna2CircleButton();
-            this.buttonRedo = new Guna.UI2.WinForms.Guna2CircleButton();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.btnCvsP = new connect6.RJControls.RJButton();
+            this.btnNewgame = new connect6.RJControls.RJButton();
+            this.btnRedo = new connect6.RJControls.RJButton();
+            this.btnUndo = new connect6.RJControls.RJButton();
+            this.rjDropdownMenu1 = new connect6.RJControls.CustomControls.RJControls.RJDropdownMenu(this.components);
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.rjDropdownMenu1.SuspendLayout();
             this.SuspendLayout();
             // 
             // CountingDown
@@ -96,43 +101,6 @@ namespace connect6
             // 
             this.ReviewPiece.Interval = 1000;
             // 
-            // buttonUndo
-            // 
-            this.buttonUndo.BackColor = System.Drawing.Color.DimGray;
-            this.buttonUndo.BackgroundImage = global::connect6.Properties.Resources.BeautifulScene;
-            this.buttonUndo.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
-            this.buttonUndo.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
-            this.buttonUndo.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
-            this.buttonUndo.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
-            this.buttonUndo.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.buttonUndo.Font = new System.Drawing.Font("Sitka Text", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonUndo.ForeColor = System.Drawing.Color.White;
-            this.buttonUndo.Location = new System.Drawing.Point(3, 2);
-            this.buttonUndo.Name = "buttonUndo";
-            this.buttonUndo.ShadowDecoration.Mode = Guna.UI2.WinForms.Enums.ShadowMode.Circle;
-            this.buttonUndo.Size = new System.Drawing.Size(133, 44);
-            this.buttonUndo.TabIndex = 5;
-            this.buttonUndo.Text = "Undo";
-            this.buttonUndo.Click += new System.EventHandler(this.guna2CircleButton1_Click);
-            // 
-            // buttonRedo
-            // 
-            this.buttonRedo.BackgroundImage = global::connect6.Properties.Resources.BeautifulScene;
-            this.buttonRedo.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
-            this.buttonRedo.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
-            this.buttonRedo.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
-            this.buttonRedo.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
-            this.buttonRedo.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.buttonRedo.Font = new System.Drawing.Font("Sitka Text", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonRedo.ForeColor = System.Drawing.Color.White;
-            this.buttonRedo.Location = new System.Drawing.Point(133, 2);
-            this.buttonRedo.Name = "buttonRedo";
-            this.buttonRedo.ShadowDecoration.Mode = Guna.UI2.WinForms.Enums.ShadowMode.Circle;
-            this.buttonRedo.Size = new System.Drawing.Size(122, 44);
-            this.buttonRedo.TabIndex = 6;
-            this.buttonRedo.Text = "Redo";
-            this.buttonRedo.Click += new System.EventHandler(this.guna2CircleButton2_Click);
-            // 
             // pictureBox1
             // 
             this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
@@ -143,17 +111,116 @@ namespace connect6
             this.pictureBox1.Size = new System.Drawing.Size(688, 26);
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
+            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
+            // 
+            // btnCvsP
+            // 
+            this.btnCvsP.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.btnCvsP.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.btnCvsP.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.btnCvsP.BorderRadius = 20;
+            this.btnCvsP.BorderSize = 0;
+            this.btnCvsP.FlatAppearance.BorderSize = 0;
+            this.btnCvsP.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCvsP.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCvsP.ForeColor = System.Drawing.Color.White;
+            this.btnCvsP.Location = new System.Drawing.Point(595, 2);
+            this.btnCvsP.Name = "btnCvsP";
+            this.btnCvsP.Size = new System.Drawing.Size(100, 44);
+            this.btnCvsP.TabIndex = 12;
+            this.btnCvsP.Text = "PvsC";
+            this.btnCvsP.TextColor = System.Drawing.Color.White;
+            this.btnCvsP.UseVisualStyleBackColor = false;
+            // 
+            // btnNewgame
+            // 
+            this.btnNewgame.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.btnNewgame.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.btnNewgame.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.btnNewgame.BorderRadius = 20;
+            this.btnNewgame.BorderSize = 0;
+            this.btnNewgame.FlatAppearance.BorderSize = 0;
+            this.btnNewgame.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnNewgame.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnNewgame.ForeColor = System.Drawing.Color.White;
+            this.btnNewgame.Location = new System.Drawing.Point(451, 2);
+            this.btnNewgame.Name = "btnNewgame";
+            this.btnNewgame.Size = new System.Drawing.Size(102, 44);
+            this.btnNewgame.TabIndex = 11;
+            this.btnNewgame.Text = "Restart";
+            this.btnNewgame.TextColor = System.Drawing.Color.White;
+            this.btnNewgame.UseVisualStyleBackColor = false;
+            this.btnNewgame.Click += new System.EventHandler(this.btnNewgame_Click);
+            // 
+            // btnRedo
+            // 
+            this.btnRedo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.btnRedo.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.btnRedo.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.btnRedo.BorderRadius = 20;
+            this.btnRedo.BorderSize = 0;
+            this.btnRedo.FlatAppearance.BorderSize = 0;
+            this.btnRedo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRedo.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnRedo.ForeColor = System.Drawing.Color.White;
+            this.btnRedo.Location = new System.Drawing.Point(331, 2);
+            this.btnRedo.Name = "btnRedo";
+            this.btnRedo.Size = new System.Drawing.Size(93, 44);
+            this.btnRedo.TabIndex = 10;
+            this.btnRedo.Text = "Redo";
+            this.btnRedo.TextColor = System.Drawing.Color.White;
+            this.btnRedo.UseVisualStyleBackColor = false;
+            this.btnRedo.Click += new System.EventHandler(this.btnRedo_Click);
+            // 
+            // btnUndo
+            // 
+            this.btnUndo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.btnUndo.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.btnUndo.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.btnUndo.BorderRadius = 20;
+            this.btnUndo.BorderSize = 0;
+            this.btnUndo.FlatAppearance.BorderSize = 0;
+            this.btnUndo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnUndo.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnUndo.ForeColor = System.Drawing.Color.White;
+            this.btnUndo.Location = new System.Drawing.Point(221, 2);
+            this.btnUndo.Name = "btnUndo";
+            this.btnUndo.Size = new System.Drawing.Size(92, 44);
+            this.btnUndo.TabIndex = 9;
+            this.btnUndo.Text = "Undo";
+            this.btnUndo.TextColor = System.Drawing.Color.White;
+            this.btnUndo.UseVisualStyleBackColor = false;
+            this.btnUndo.Click += new System.EventHandler(this.btnUndo_Click);
+            // 
+            // rjDropdownMenu1
+            // 
+            this.rjDropdownMenu1.IsMainMenu = false;
+            this.rjDropdownMenu1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem1});
+            this.rjDropdownMenu1.MenuItemHeight = 25;
+            this.rjDropdownMenu1.MenuItemTextColor = System.Drawing.Color.Empty;
+            this.rjDropdownMenu1.Name = "rjDropdownMenu1";
+            this.rjDropdownMenu1.PrimaryColor = System.Drawing.Color.Empty;
+            this.rjDropdownMenu1.Size = new System.Drawing.Size(181, 26);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem1.Text = "toolStripMenuItem1";
             // 
             // FrmGame
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.BackgroundImage = global::connect6.Properties.Resources.NewBoard;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(1078, 749);
-            this.Controls.Add(this.buttonRedo);
-            this.Controls.Add(this.buttonUndo);
+            this.ClientSize = new System.Drawing.Size(1082, 749);
+            this.Controls.Add(this.btnCvsP);
+            this.Controls.Add(this.btnNewgame);
+            this.Controls.Add(this.btnRedo);
+            this.Controls.Add(this.btnUndo);
             this.Controls.Add(this.ReviewLastGame);
             this.Controls.Add(this.RestartGame);
             this.Controls.Add(this.TotalTime);
@@ -163,11 +230,12 @@ namespace connect6
             this.MaximizeBox = false;
             this.Name = "FrmGame";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Connect 6";
+            this.Text = "PvsC";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseDown);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseMove);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.rjDropdownMenu1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -181,9 +249,13 @@ namespace connect6
         private System.Windows.Forms.Button RestartGame;
         private System.Windows.Forms.Button ReviewLastGame;
         private System.Windows.Forms.Timer ReviewPiece;
-        private Guna.UI2.WinForms.Guna2CircleButton buttonUndo;
-        private Guna.UI2.WinForms.Guna2CircleButton buttonRedo;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private RJControls.RJButton btnUndo;
+        private RJControls.RJButton btnRedo;
+        private RJControls.RJButton btnNewgame;
+        private RJControls.RJButton btnCvsP;
+        private RJControls.CustomControls.RJControls.RJDropdownMenu rjDropdownMenu1;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
     }
 }
 

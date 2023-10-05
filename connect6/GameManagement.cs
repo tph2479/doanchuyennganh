@@ -31,8 +31,6 @@ namespace connect6
         /// </summary>
         public PieceType CurrentPlayer = PieceType.BLACK;
 
-       
-   
         public Piece TempStorePiece = null;
         /// <summary>
         /// Liệu quân cờ do người chơi chơi có trở thành quân nhắc nhở hay không
@@ -144,6 +142,7 @@ namespace connect6
         /// <summary>
         /// Kiểm tra xem chiến thắng
         /// </summary>
+  
         private void CheckWinner()
         {
             int centerX = Board.LastPlacedNode.X;

@@ -60,7 +60,7 @@ namespace connect6
         /// <summary>
         /// Thông tin về vật dụng cờ lưu trữ các quân cờ hiện có trên bàn cờ
         /// </summary>
-        private readonly Piece[,] Pieces = new Piece[19, 19];
+        public Piece[,] Pieces = new Piece[19, 19];
 
         /// <summary>
         /// Lưu trữ thông tin về các quân nhắc màu đỏ trên bàn cờ
@@ -146,6 +146,8 @@ namespace connect6
         /// <returns>Đối tượng Quân cờ (thông tin liên quan đến quân cờ)</returns>
         public Piece PlaceAPiece(int x, int y, PieceType type, bool IsRedHint)
         {
+
+
             //Tìm điểm gần nhất hiện tại của con trỏ
             Point nodePos = FindTheCloseNode(x, y);
 
@@ -173,7 +175,7 @@ namespace connect6
                     RedHintPiece = new RedHintPiece(realFormPos.X, realFormPos.Y);
                 }
 
-                Pieces[nodePos.X, nodePos.Y] = new BlackPiece(realFormPos.X, realFormPos.Y);
+                Pieces[nodePos.Y, nodePos.X] = new BlackPiece(realFormPos.X, realFormPos.Y);
             }
             else if (type == PieceType.WHITE)
             {
@@ -182,13 +184,13 @@ namespace connect6
                     RedHintPiece = new RedHintPiece(realFormPos.X, realFormPos.Y);
                 }
 
-                Pieces[nodePos.X, nodePos.Y] = new WhitePiece(realFormPos.X, realFormPos.Y);
+                Pieces[nodePos.Y, nodePos.X] = new WhitePiece(realFormPos.X, realFormPos.Y);
             }
 
             //Ghi lại vị trí cuối cùng của quân cờ
             LastPlacedNodePos = nodePos;
 
-            return Pieces[nodePos.X, nodePos.Y];
+            return Pieces[nodePos.Y, nodePos.X];
         }
 
         /// <summary>
@@ -213,7 +215,7 @@ namespace connect6
             {
                 for (int y = 0; y < 19; y++)
                 {
-                    Console.Write(Pieces[x, y] != null ? "X" : "0");
+                    Console.Write(Pieces[x, y] != null ? "X " : "_ ");
                 }
                 Console.WriteLine();
             }

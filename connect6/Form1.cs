@@ -78,7 +78,7 @@ namespace connect6
                
             //Nếu vị trí hiện tại của con trỏ có thể được di chuyển, tọa độ thực của việc di chuyển sẽ được trả về, nếu không sẽ trả về null.
            Piece piece = game.IsPlaceAPiece(e.X, e.Y);
-            HandleTree(piece);
+            
             if (IsOnGame == false)
             {
                 return;
@@ -89,7 +89,7 @@ namespace connect6
                 this.Controls.Add(pictureBox1);
                 if (game.IsFirst)
                 {
-                    
+
                     //Bước đầu tiên trong trò chơi
                     this.Controls.Add(piece);
                     //Lưu kỷ lục cờ vua
@@ -97,11 +97,11 @@ namespace connect6
                     {
                         StoringForReviewGame.Add(piece);
                         this.Controls.RemoveAt(PieceIndex);
-                        
+
                     }
                     CountingDown.Start();
-                  //  this.Controls.Add(TotalTime);
-                   // this.Controls.RemoveAt(PieceIndex);  // Khải: Chỗ Này là để xóa Dấu nhắc đỏ ở nước vừa đi
+                    //  this.Controls.Add(TotalTime);
+                    // this.Controls.RemoveAt(PieceIndex);  // Khải: Chỗ Này là để xóa Dấu nhắc đỏ ở nước vừa đi
                 }
                 else if (game.IsRedHint)
                 {
@@ -192,6 +192,7 @@ namespace connect6
                 {
                     //Xác định ai sẽ thay thế ở vòng tiếp theo
                     game.ChangeWhoRule();
+                    HandleTree(piece);   
                 }
             }
          
@@ -209,6 +210,7 @@ namespace connect6
             //                                                               ni                  ni
 
             game.PrintAll();
+            game.TreeGenerate();
         }
 
         /// <summary>

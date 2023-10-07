@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -31,8 +33,6 @@ namespace connect6
         /// </summary>
         public PieceType CurrentPlayer = PieceType.BLACK;
 
-       
-   
         public Piece TempStorePiece = null;
         /// <summary>
         /// Liệu quân cờ do người chơi chơi có trở thành quân nhắc nhở hay không
@@ -47,6 +47,8 @@ namespace connect6
         /// Hãy để người ngoài có được thông tin chiến thắng trò chơi
         /// </summary>
         public PieceType Winner { get { return WinnerType; } }
+
+        Tree tree = new Tree();
 
         /// <summary>
         /// Xác định xem vị trí con trỏ có nằm trong phạm vi có thể thả hay không
@@ -97,7 +99,7 @@ namespace connect6
             if (IsFirst)
             {
                 IsFirst = false;
-                CurrentPlayer = PieceType.WHITE;
+                // CurrentPlayer = PieceType.WHITE;
                 IsRedHint = true;
             }
             else if (CurrentPlayer == PieceType.BLACK)
@@ -110,24 +112,24 @@ namespace connect6
                 else if (NumStep == 2)
                 {
                     NumStep = 1;
-                    CurrentPlayer = PieceType.WHITE;
+                    //CurrentPlayer = PieceType.WHITE;
                     IsRedHint = true;
                 }
             }
-            else if (CurrentPlayer == PieceType.WHITE)
-            {
-                if (NumStep == 1)
-                {
-                    NumStep++;
-                    IsRedHint = false;
-                }
-                else if (NumStep == 2)
-                {
-                    NumStep = 1;
-                    CurrentPlayer = PieceType.BLACK;
-                    IsRedHint = true;
-                }
-            }
+            //else if (CurrentPlayer == PieceType.WHITE)
+            //{
+            //    if (NumStep == 1)
+            //    {
+            //        NumStep++;
+            //        IsRedHint = false;
+            //    }
+            //    else if (NumStep == 2)
+            //    {
+            //        NumStep = 1;
+            //        CurrentPlayer = PieceType.BLACK;
+            //        IsRedHint = true;
+            //    }
+            //}
             //quy tắc
             //if(IsBlack)
             //{  
@@ -144,6 +146,7 @@ namespace connect6
         /// <summary>
         /// Kiểm tra xem chiến thắng
         /// </summary>
+  
         private void CheckWinner()
         {
             int centerX = Board.LastPlacedNode.X;
@@ -200,6 +203,17 @@ namespace connect6
                     }
                 }
             }
+        }
+
+        internal void PrintAll()
+        {
+            Console.WriteLine("\nPrint them all");
+            Board.printAll();
+        }
+
+        internal void TreeGenerate()
+        {
+            
         }
     }
 }

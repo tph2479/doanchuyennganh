@@ -17,6 +17,10 @@ namespace connect6
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FrmWait());
+            //Tree tree = new Tree();
+            //tree.Branch.Add(new Tree(1));
+
+            //tree.Branch.Last().Branch.Add(new Tree(2));    tree.Print(tree);
         }
     }
 }

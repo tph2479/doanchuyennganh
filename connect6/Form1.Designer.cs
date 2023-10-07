@@ -34,7 +34,6 @@ namespace connect6
             this.CountingDown = new System.Windows.Forms.Timer(this.components);
             this.TotalTime = new System.Windows.Forms.Label();
             this.Animation = new System.Windows.Forms.Timer(this.components);
-            this.RestartGame = new System.Windows.Forms.Button();
             this.ReviewLastGame = new System.Windows.Forms.Button();
             this.ReviewPiece = new System.Windows.Forms.Timer(this.components);
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -64,22 +63,6 @@ namespace connect6
             this.TotalTime.TabIndex = 1;
             this.TotalTime.Text = "30";
             this.TotalTime.Click += new System.EventHandler(this.TotalTime_Click);
-            // 
-            // RestartGame
-            // 
-            this.RestartGame.BackColor = System.Drawing.Color.Black;
-            this.RestartGame.FlatAppearance.MouseDownBackColor = System.Drawing.Color.White;
-            this.RestartGame.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gold;
-            this.RestartGame.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.RestartGame.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.RestartGame.ForeColor = System.Drawing.Color.Red;
-            this.RestartGame.Location = new System.Drawing.Point(584, 813);
-            this.RestartGame.Name = "RestartGame";
-            this.RestartGame.Size = new System.Drawing.Size(150, 50);
-            this.RestartGame.TabIndex = 2;
-            this.RestartGame.Text = "Restart";
-            this.RestartGame.UseVisualStyleBackColor = false;
-            this.RestartGame.Click += new System.EventHandler(this.RestartGame_Click);
             // 
             // ReviewLastGame
             // 
@@ -222,7 +205,6 @@ namespace connect6
             this.Controls.Add(this.btnRedo);
             this.Controls.Add(this.btnUndo);
             this.Controls.Add(this.ReviewLastGame);
-            this.Controls.Add(this.RestartGame);
             this.Controls.Add(this.TotalTime);
             this.Controls.Add(this.pictureBox1);
             this.DoubleBuffered = true;
@@ -246,7 +228,6 @@ namespace connect6
         private System.Windows.Forms.Timer CountingDown;
         private System.Windows.Forms.Label TotalTime;
         private System.Windows.Forms.Timer Animation;
-        private System.Windows.Forms.Button RestartGame;
         private System.Windows.Forms.Button ReviewLastGame;
         private System.Windows.Forms.Timer ReviewPiece;
         private System.Windows.Forms.PictureBox pictureBox1;

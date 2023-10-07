@@ -108,7 +108,6 @@ namespace connect6
                     //Quân đầu tiên trong hai quân ở bất kỳ vòng nào (quân nhắc màu đỏ)
                     this.Controls.Add(piece);
                     PieceIndex++;
-                    game.IsRedHint = false;
                     this.Controls.Add(TotalTime);
                     this.Controls.RemoveAt(PieceIndex);
                 }
@@ -191,8 +190,14 @@ namespace connect6
                 if (IsOnGame)
                 {
                     //Xác định ai sẽ thay thế ở vòng tiếp theo
+                    if(!game.IsRedHint)
+                    {        
+                        HandleTree(piece);
+                        game.IsRedHint = false;
+
+                    }
                     game.ChangeWhoRule();
-                    HandleTree(piece);   
+
                 }
             }
          

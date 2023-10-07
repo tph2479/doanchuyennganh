@@ -78,6 +78,7 @@ namespace connect6
                
             //Nếu vị trí hiện tại của con trỏ có thể được di chuyển, tọa độ thực của việc di chuyển sẽ được trả về, nếu không sẽ trả về null.
            Piece piece = game.IsPlaceAPiece(e.X, e.Y);
+            HandleTree(piece);
             if (IsOnGame == false)
             {
                 return;
@@ -194,6 +195,20 @@ namespace connect6
                 }
             }
          
+        }
+
+        private void HandleTree(Piece piece)
+        {
+            // 1,lặp và in ra bàn cờ hiện tại
+            // 2,tìm tất cả các khả năng (chỗ mà không có quân cờ) (mỗi nhánh là một ô trống)
+            // 3,in ra ni của một nhánh bất kỳ (tức đã tìm tất cả các lá của nhánh, tức đã biết được ai thắng trên lá đó)
+            // 4,in ra ni của tất cả các nhóm
+            // 5,tính Ni (N = tổng tất cả ni) và wi (wi là tổng các lá có kết quả thắng)
+            // 6,tính giá trị UCT và chọn nhánh (hay bước đi kế tiếp)        wi                ln(Ni)
+            //                                                         UCT = -- + sqrt(2)*sqrt(------)
+            //                                                               ni                  ni
+
+            game.PrintAll();
         }
 
         /// <summary>

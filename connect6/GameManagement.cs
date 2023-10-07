@@ -200,5 +200,11 @@ namespace connect6
                 }
             }
         }
+
+        internal void PrintAll()
+        {
+            Console.WriteLine("\nPrint them all");
+            Board.printAll();
+        }
     }
 }

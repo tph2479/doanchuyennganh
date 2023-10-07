@@ -207,6 +207,19 @@ namespace connect6
             return pieceRealFormPos;
         }
 
+        internal void printAll()
+        {
+            for (int x = 0; x < 19; x++)
+            {
+                for (int y = 0; y < 19; y++)
+                {
+                    Console.Write(Pieces[x, y] != null ? "X" : "0");
+                }
+                Console.WriteLine();
+            }
+
+        }
+
         /// <summary>
         /// Tìm điểm con trỏ hiện đang ở gần nhất
         /// </summary>

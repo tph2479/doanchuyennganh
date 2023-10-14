@@ -48,7 +48,7 @@ namespace connect6
         /// </summary>
         public PieceType Winner { get { return WinnerType; } }
 
-        Tree tree = new Tree();
+        public TreeNode tree = new TreeNode(null, 0);
 
         /// <summary>
         /// Xác định xem vị trí con trỏ có nằm trong phạm vi có thể thả hay không
@@ -213,7 +213,17 @@ namespace connect6
 
         internal void TreeGenerate()
         {
+            // với mỗi một ô chưa đánh sẽ tạo một bản sao của bàn cờ
+            // bàn cờ đó sẽ lưu vào trong cây
+
+            // tạo bản sao
+
             
+            
+            // CẦN PHẢI XÁC ĐỊNH CHÍNH XÁC MỖI NODE TRONG CÂY CHƯA NHỮNG THÀNH PHẦN GÌ:
+            //     1.BÀN CỜ
+            //     2.CÁC TRẠNG THÁI LIÊN QUAN NHƯ BƯỚC ĐI CUỐI CÙNG,...
+
         }
     }
 }

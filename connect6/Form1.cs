@@ -193,7 +193,7 @@ namespace connect6
                     if(!game.IsRedHint)
                     {        
                         HandleTree(piece);
-                        game.IsRedHint = false;
+                        // game.IsRedHint = false;
 
                     }
                     game.ChangeWhoRule();

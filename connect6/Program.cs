@@ -21,6 +21,16 @@ namespace connect6
             //tree.Branch.Add(new Tree(1));
 
             //tree.Branch.Last().Branch.Add(new Tree(2));    tree.Print(tree);
+            //Board board = new Board();
+            //board.Pieces[0, 0] = new WhitePiece(0, 0);
+
+            //Console.WriteLine("@@@@@@@@@@@@@@@@@@@@@@@@-@@@@@@@@@@@@@@@@@@@@@@@");
+            //Console.WriteLine(board.Pieces[0, 0]);
+
+            //Board newBoard = board.Clone();
+            //board.Pieces[0, 0] = new BlackPiece(0, 0);
+            //Console.WriteLine(board.Pieces[0, 0]);
+            //Console.WriteLine(newBoard.Pieces[0, 0]);
         }
     }
 }

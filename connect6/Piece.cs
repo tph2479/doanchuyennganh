@@ -11,6 +11,7 @@ namespace connect6
     /// <summary>
     /// Piece
     /// </summary>
+    
     abstract class Piece : PictureBox
     {
         //độ dài cạnh của quân cờ

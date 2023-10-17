@@ -222,6 +222,32 @@ namespace connect6
 
         }
 
+        internal List<Piece[,]> Generate()
+        {
+
+            List<Piece[,]> newpiece = new List<Piece[,]>();
+
+            for (int x = 0; x < 19; x++)
+            {
+                for (int y = 0; y < 19; y++)
+                {
+                    if (Pieces[x, y] == null)
+                    {
+                        Piece[,] newobject = CloneUtility.DeepClone(Pieces);
+                        newpiece.Add(newobject);
+                        newobject[x, y] = new WhitePiece(x, y);
+
+                    }
+                    Console.WriteLine(Pieces[x, y] != null ? "x " : "_ ");
+                }
+                Console.WriteLine();
+            }
+
+
+                return newpiece;
+        }
+        
+
         /// <summary>
         /// Tìm điểm con trỏ hiện đang ở gần nhất
         /// </summary>

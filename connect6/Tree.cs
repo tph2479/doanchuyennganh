@@ -10,12 +10,13 @@ namespace connect6
     {
         private TreeNode parent;
         private List<TreeNode> children;
+        private Piece[,] Pieces;
         private int nVisits;
         private double q;
         private double u;
         private double p;
 
-        public TreeNode(TreeNode parent, double priorP)
+        public TreeNode(TreeNode parent, double priorP, Piece[,] piece)
         {
             this.parent = parent;
             children = new List<TreeNode>();
@@ -23,10 +24,12 @@ namespace connect6
             q = 0;
             u = 0;
             p = priorP;
+
+            this.Pieces = piece;
         }
 
         public TreeNode Parent { get { return parent; } set { parent = value; } }
-
+        public Piece[,] Pieces { get; set; }
         public List<TreeNode> Children { get { return children; } }
 
         public int NVisits { get { return nVisits; } }

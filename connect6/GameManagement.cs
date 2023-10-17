@@ -11,6 +11,7 @@ namespace connect6
     /// <summary>
     /// Đối tượng quản lý trò chơi
     /// </summary>
+    
     class GameManagement
     {
         /// <summary>
@@ -219,7 +220,13 @@ namespace connect6
             // tạo bản sao
 
             
-            
+            List<Piece[,]> pieces = Board.Generate();
+            foreach(var piece in pieces)
+            {
+                TreeNode node = new TreeNode(tree,0);
+                node.pi
+            }
+
             // CẦN PHẢI XÁC ĐỊNH CHÍNH XÁC MỖI NODE TRONG CÂY CHƯA NHỮNG THÀNH PHẦN GÌ:
             //     1.BÀN CỜ
             //     2.CÁC TRẠNG THÁI LIÊN QUAN NHƯ BƯỚC ĐI CUỐI CÙNG,...

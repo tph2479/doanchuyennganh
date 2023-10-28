@@ -9,7 +9,7 @@ namespace connect6
     /// <summary>
     /// Loại quân cờ: KHÔNG có nghĩa là không có quân cờ/ĐỎ có nghĩa là quân nhanh
     /// </summary>
-    enum PieceType
+    public enum PieceType
     {
         BLACK,WHITE,RED,NON
     }

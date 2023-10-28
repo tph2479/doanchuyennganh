@@ -233,7 +233,7 @@ namespace connect6
                 {
                     if (Pieces[x, y] == null)
                     {
-                        Piece[,] newobject = CloneUtility.DeepClone(Pieces);
+                        Piece[,] newobject = makeClone(Pieces);
                         newpiece.Add(newobject);
                         newobject[x, y] = new WhitePiece(x, y);
 
@@ -246,7 +246,21 @@ namespace connect6
 
                 return newpiece;
         }
-        
+
+        private Piece[,] makeClone(Piece[,] pieces)
+        {
+            Piece[,] ret = new Piece[19, 19];
+            for(int i = 0; i < 19; i++)
+            {
+                for(int j = 0; j < 19; j++)
+                {
+                    ret[i, j] = pieces[i, j];
+                }
+            }
+
+            return ret;
+        }
+
 
         /// <summary>
         /// Tìm điểm con trỏ hiện đang ở gần nhất

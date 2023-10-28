@@ -49,7 +49,7 @@ namespace connect6
         /// </summary>
         public PieceType Winner { get { return WinnerType; } }
 
-        public TreeNode tree = new TreeNode(null, 0);
+        public TreeNode tree = new TreeNode(null, 0, null);
 
         /// <summary>
         /// Xác định xem vị trí con trỏ có nằm trong phạm vi có thể thả hay không
@@ -223,9 +223,17 @@ namespace connect6
             List<Piece[,]> pieces = Board.Generate();
             foreach(var piece in pieces)
             {
-                TreeNode node = new TreeNode(tree,0);
-                node.pi
+                TreeNode node = new TreeNode(tree, 0, piece);
+                for(int i = 0; i < 19; i++)
+                {
+                    for (int j = 0; j < 19; j++)
+                        Console.Write(piece[i, j] != null ? "X" : "_");
+                    Console.WriteLine();
+                }
+                Console.WriteLine();
             }
+            
+
 
             // CẦN PHẢI XÁC ĐỊNH CHÍNH XÁC MỖI NODE TRONG CÂY CHƯA NHỮNG THÀNH PHẦN GÌ:
             //     1.BÀN CỜ

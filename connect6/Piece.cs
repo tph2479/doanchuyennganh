@@ -12,7 +12,7 @@ namespace connect6
     /// Piece
     /// </summary>
     
-    abstract class Piece : PictureBox
+    abstract public class Piece : PictureBox
     {
         //độ dài cạnh của quân cờ
         private static int IMAGE_WIDTH ;

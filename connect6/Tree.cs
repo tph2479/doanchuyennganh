@@ -25,11 +25,10 @@ namespace connect6
             u = 0;
             p = priorP;
 
-            this.Pieces = piece;
+            Pieces = piece;
         }
 
         public TreeNode Parent { get { return parent; } set { parent = value; } }
-        public Piece[,] Pieces { get; set; }
         public List<TreeNode> Children { get { return children; } }
 
         public int NVisits { get { return nVisits; } }

@@ -215,7 +215,7 @@ namespace connect6
             //                                                               ni                  ni
 
             game.PrintAll();
-            game.TreeGenerate();
+            game.PlayoutGenerate();
         }
 
         /// <summary>

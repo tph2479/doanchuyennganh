@@ -120,6 +120,7 @@
     <Compile Include="CustomControls\RJDropdownMenu.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="MCTS.cs" />
     <Compile Include="Tree.cs" />
     <Compile Include="WhitePiece.cs">
       <SubType>Component</SubType>

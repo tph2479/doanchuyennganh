@@ -18,6 +18,7 @@ namespace connect6
         /// Đối tượng bàn cờ
         /// </summary>
         public Board Board = new Board();
+        public MCTS mcts = new MCTS();
 
         /// <summary>
         /// 1 tượng trưng cho bước đầu tiên của Đen hoặc Trắng / 2 tượng trưng cho bước thứ hai của Đen hoặc Trắng
@@ -49,7 +50,7 @@ namespace connect6
         /// </summary>
         public PieceType Winner { get { return WinnerType; } }
 
-        public TreeNode tree = new TreeNode(null, 0, null);
+        public MCTS tree = new MCTS(null, 0, null);
 
         /// <summary>
         /// Xác định xem vị trí con trỏ có nằm trong phạm vi có thể thả hay không
@@ -212,28 +213,28 @@ namespace connect6
             Board.printAll();
         }
 
-        internal void TreeGenerate()
+        internal void PlayoutGenerate()
         {
             // với mỗi một ô chưa đánh sẽ tạo một bản sao của bàn cờ
             // bàn cờ đó sẽ lưu vào trong cây
 
             // tạo bản sao
 
-            
-            List<Piece[,]> pieces = Board.Generate();
-            foreach(var piece in pieces)
-            {
-                TreeNode node = new TreeNode(tree, 0, piece);
-                for(int i = 0; i < 19; i++)
-                {
-                    for (int j = 0; j < 19; j++)
-                        Console.Write(piece[i, j] != null ? "X" : "_");
-                    Console.WriteLine();
-                }
-                Console.WriteLine();
-            }
-            
 
+            //List<Piece[,]> pieces = Board.Generate();
+            //foreach(var piece in pieces)
+            //{
+            //    MCTS node = new MCTS(tree, 0, piece);
+            //    for(int i = 0; i < 19; i++)
+            //    {
+            //        for (int j = 0; j < 19; j++)
+            //            Console.Write(piece[i, j] != null ? "X" : "_");
+            //        Console.WriteLine();
+            //    }
+            //    Console.WriteLine();
+            //}
+
+            mcts.expand();
 
             // CẦN PHẢI XÁC ĐỊNH CHÍNH XÁC MỖI NODE TRONG CÂY CHƯA NHỮNG THÀNH PHẦN GÌ:
             //     1.BÀN CỜ

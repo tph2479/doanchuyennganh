@@ -50,7 +50,6 @@ namespace connect6
         /// </summary>
         public PieceType Winner { get { return WinnerType; } }
 
-        public MCTS tree = new MCTS(null, 0, null);
 
         /// <summary>
         /// Xác định xem vị trí con trỏ có nằm trong phạm vi có thể thả hay không

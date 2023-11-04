@@ -11,6 +11,7 @@ namespace connect6
         private Tree parent;
         private List<Tree> children;
         private Piece[,] Pieces;
+        private int Ni, wi, ni;
 
         public Tree(Tree parent, double priorP, Piece[,] piece)
         {
@@ -43,6 +44,34 @@ namespace connect6
             //        children[action] = new treenode(this, prior);
             //    }
             //}
+        }
+
+        public Tree select(Tree root)
+        {
+            Tree node = root;
+
+            if (root.Children.Count == 0)
+                return node;
+
+            double max = root.Children.First().getValue();
+            
+            for(int i = 1; i < root.Children.Count; i++)
+            {
+                if (max < root.Children[i].getValue())
+                {
+                    max = root.Children[i].getValue();
+                    node = root.Children[i];
+                }
+            }
+
+            return node;
+        }
+
+        private double getValue()
+        {
+            if (ni == 0)
+                return 2147483647;
+            return ((double) wi / ni) + 1.41 * Math.Sqrt(Math.Log(Ni) / (double)Ni);
         }
 
         //public Tuple<int, TreeNode> Select(double cPuct)

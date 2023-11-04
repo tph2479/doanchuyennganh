@@ -234,7 +234,8 @@ namespace connect6
             //    Console.WriteLine();
             //}
 
-            mcts.expand();
+            // hàm này thực thi 4 bước của thuật toán mcts
+            mcts.playout();
 
             // CẦN PHẢI XÁC ĐỊNH CHÍNH XÁC MỖI NODE TRONG CÂY CHƯA NHỮNG THÀNH PHẦN GÌ:
             //     1.BÀN CỜ

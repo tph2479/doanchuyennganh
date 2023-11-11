@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace connect6
 {
-    class Tree
+    public class Tree
     {
         private Tree parent;
-        private List<Tree> children;
+        private List<Tree> children = new List<Tree>();
         private Piece[,] Pieces;
         private int Ni, wi, ni;
+        private Boolean ended = false;
 
         public Tree(Tree parent, double priorP, Piece[,] piece)
         {
@@ -20,11 +21,31 @@ namespace connect6
 
         public Tree Parent { get { return parent; } set { parent = value; } }
 
+        public void setni(int value)
+        {
+            ni = value;
+        }
+
+        public void setNi(int value)
+        {
+            ni = value;
+        }
+
+        public void setwi(int value)
+        {
+            wi = value;
+        }
+
         public List<Tree> Children { get { return children; } }
 
         public bool IsLeaf()
         {
             return children.Count == 0;
+        }
+
+        internal bool isEnded()
+        {
+            return ended;
         }
 
         //public double GetUCB(double cPuct)
@@ -33,45 +54,19 @@ namespace connect6
         //    return q + u;
         //}
 
-        public void expand()
-        {
-            //foreach (var actionprior in actionpriors)
-            //{
-            //    int action = actionprior.item1;
-            //    double prior = actionprior.item2;
-            //    if (!children.containskey(action))
-            //    {
-            //        children[action] = new treenode(this, prior);
-            //    }
-            //}
-        }
-
-        public Tree select(Tree root)
-        {
-            Tree node = root;
-
-            if (root.Children.Count == 0)
-                return node;
-
-            double max = root.Children.First().getValue();
-            
-            for(int i = 1; i < root.Children.Count; i++)
-            {
-                if (max < root.Children[i].getValue())
-                {
-                    max = root.Children[i].getValue();
-                    node = root.Children[i];
-                }
-            }
-
-            return node;
-        }
-
-        private double getValue()
+        public double getValue()
         {
             if (ni == 0)
                 return 2147483647;
-            return ((double) wi / ni) + 1.41 * Math.Sqrt(Math.Log(Ni) / (double)Ni);
+            return (double)wi / ni + 1.41 * Math.Sqrt((double)Math.Log(1)/(double)ni);
+        }
+
+        internal Tree getRandomChild()
+        {
+            int max = Children.Count;
+            int index = new Random().Next(0, max);
+
+            return Children.ElementAt(index);
         }
 
         //public Tuple<int, TreeNode> Select(double cPuct)

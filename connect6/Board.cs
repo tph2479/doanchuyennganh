@@ -144,10 +144,8 @@ namespace connect6
         /// <param name="y">Tọa độ y hiện tại của con trỏ<</param>
         /// <param name="type">màu đen hoặc màu trắng</param>
         /// <returns>Đối tượng Quân cờ (thông tin liên quan đến quân cờ)</returns>
-        public Piece PlaceAPiece(int x, int y, PieceType type, bool IsRedHint)
+        public Piece PlaceAPiece(int x, int y, PieceType type)
         {
-
-
             //Tìm điểm gần nhất hiện tại của con trỏ
             Point nodePos = FindTheCloseNode(x, y);
 
@@ -170,20 +168,10 @@ namespace connect6
             //Nhập điểm con trỏ sắp đi vào mảng quân cờ để ghi tại điểm bàn cờ đó có quân cờ.
             if (type == PieceType.BLACK)
             {
-                if (IsRedHint)
-                {
-                    RedHintPiece = new RedHintPiece(realFormPos.X, realFormPos.Y);
-                }
-
                 Pieces[nodePos.Y, nodePos.X] = new BlackPiece(realFormPos.X, realFormPos.Y);
             }
             else if (type == PieceType.WHITE)
             {
-                if (IsRedHint)
-                {
-                    RedHintPiece = new RedHintPiece(realFormPos.X, realFormPos.Y);
-                }
-
                 Pieces[nodePos.Y, nodePos.X] = new WhitePiece(realFormPos.X, realFormPos.Y);
             }
 
@@ -268,7 +256,7 @@ namespace connect6
         /// <param name="x">Tọa độ x hiện tại của con trỏ</param>
         /// <param name="y">Tọa độ Y hiện tại của con trỏ</param>
         /// <returns>Trả về tọa độ các điểm liền kề dưới dạng đối tượng điểm</returns>
-        private Point FindTheCloseNode(int x, int y)
+        public Point FindTheCloseNode(int x, int y)
         {
             int nodeID_X = FindTheCloseNodeAlone(x, OFFSET_X, "x");
             int nodeID_Y = FindTheCloseNodeAlone(y, OFFSET_Y, "y");

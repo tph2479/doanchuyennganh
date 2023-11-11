@@ -71,68 +71,41 @@ namespace connect6
             /// Tạo quân cờ khi nhấn chuột
             /// </summary>
             /// <param name="sender"></param>
-            /// <param name="e">落下座標</param>
+            /// <param name="e">Tạo độ</param>
             private void Form1_MouseDown(object sender, MouseEventArgs e)
-        {
-             
-               
-            //Nếu vị trí hiện tại của con trỏ có thể được di chuyển, tọa độ thực của việc di chuyển sẽ được trả về, nếu không sẽ trả về null.
-           Piece piece = game.IsPlaceAPiece(e.X, e.Y);
-            
-            if (IsOnGame == false)
             {
-                return;
-            }
+                if (IsOnGame == false)
+                {
+                    return;
+                }
+
+                //Nếu vị trí hiện tại của con trỏ có thể được di chuyển, tọa độ thực của việc di chuyển sẽ được trả về, nếu không sẽ trả về null.
+                Piece piece = game.IsPlaceAPiece(e.X, e.Y);
            
-            if (piece != null)
-            {
+                if (piece != null)
+                {
                 this.Controls.Add(pictureBox1);
-                if (game.IsFirst)
-                {
+                StoringForReviewGame.Add(piece);
+                //this.Controls.RemoveAt(PieceIndex);
+                PieceIndex++;
 
-                    //Bước đầu tiên trong trò chơi
-                    this.Controls.Add(piece);
-                    //Lưu kỷ lục cờ vua
-                    if (!game.IsRedHint)
+                    if (game.IsFirst)
                     {
-                        StoringForReviewGame.Add(piece);
-                        this.Controls.RemoveAt(PieceIndex);
+                        //Bước đầu tiên trong trò chơi
+                        this.Controls.Add(piece);
 
+                        CountingDown.Start();
+                        // this.Controls.Add(TotalTime);
+                        // this.Controls.RemoveAt(PieceIndex);  // Khải: Chỗ Này là để xóa Dấu nhắc đỏ ở nước vừa đi
                     }
-                    CountingDown.Start();
-                    //  this.Controls.Add(TotalTime);
-                    // this.Controls.RemoveAt(PieceIndex);  // Khải: Chỗ Này là để xóa Dấu nhắc đỏ ở nước vừa đi
-                }
-                else if (game.IsRedHint)
-                {
-                    //Quân đầu tiên trong hai quân ở bất kỳ vòng nào (quân nhắc màu đỏ)
-                    this.Controls.Add(piece);
-                    PieceIndex++;
-                    this.Controls.Add(TotalTime);
-                    this.Controls.RemoveAt(PieceIndex);
-                }
-                else
-                {
-                    //Đầu tiên hãy xóa dấu nhắc màu đỏ ở bước trước
-                    this.Controls.RemoveAt(PieceIndex);
-                    Piece originalpiece = game.TempStorePiece;
-                    //Sau đó thay quân cờ bằng quân màu ban đầu
-                    this.Controls.Add(originalpiece);
-
-    
-                    this.Controls.Add(piece);
-                    if (!game.IsRedHint)
+                    else
                     {
-                        StoringForReviewGame.Add(originalpiece);
-                        StoringForReviewGame.Add(piece);
+                        this.Controls.Add(piece);
+                        
+                        CountingDown.Stop();
+                        TotalTime.Text = PlayerTime;
+                        CountingDown.Start();
                     }
-                    // Lưu kỷ lục cờ vua
-                    PieceIndex++;
-
-                    CountingDown.Stop();
-                    TotalTime.Text = PlayerTime;
-                    CountingDown.Start();
-                }
 
                 // Đánh giá xem có chiến thắng không
                 if (game.Winner == PieceType.BLACK)
@@ -189,16 +162,45 @@ namespace connect6
 
                 if (IsOnGame)
                 {
-                    //Xác định ai sẽ thay thế ở vòng tiếp theo
-                    if(!game.IsRedHint)
-                    {        
-                        HandleTree(piece);
-                        // game.IsRedHint = false;
-
-                    }
                     game.ChangeWhoRule();
 
+                    //if (game.CurrentPlayer == game.PC)
+                    //{
+
+                    //    Console.WriteLine("Máy đánh");
+                    //    // tới lượt máy đánh 2 lần liên tiếp
+                    //    // tạo 2 bước đi tốt nhất liền kề nhau
+
+                    //    //Piece p1 = game.IsPlaceAPiece(e.X, e.Y);
+                    //    //Piece p2 = game.IsPlaceAPiece(e.X, e.Y);
+
+                    //    Piece p1 = null;
+
+                    //    //while (p1 == null)
+                    //    //{
+
+                    //    Point nodePos = game.Board.FindTheCloseNode(new Random().Next(1, 19), new Random().Next(1, 19));
+                    //    p1 = game.IsPlaceAPiece(nodePos.X, nodePos.Y);
+                    //    Console.WriteLine("lặp lại lần nữa ");
+                    //    this.Controls.Add(p1);
+                        
+                    //    //}
+                        
+                    //    //if (game.IsFirst == false)
+                    //    //{
+                    //    //    game.ChangeWhoRule();
+                    //    //    Piece p2 = game.IsPlaceAPiece(new Random().Next(1, 19), new Random().Next(1, 19));
+                    //    //    while (p2 == null)
+                    //    //        p1 = game.IsPlaceAPiece(new Random().Next(1, 19), new Random().Next(1, 19));
+                    //    //    game.ChangeWhoRule();
+                    //    //}
+                    //}
+
+                    if (game.IsFirst == true)
+                        game.IsFirst = false;
                 }
+
+                
             }
          
         }
@@ -211,11 +213,12 @@ namespace connect6
             // 4,in ra ni của tất cả các nhóm
             // 5,tính Ni (N = tổng tất cả ni) và wi (wi là tổng các lá có kết quả thắng)
             // 6,tính giá trị UCT và chọn nhánh (hay bước đi kế tiếp)        wi                ln(Ni)
-            //                                                         UCT = -- + sqrt(2)*sqrt(------)
+            //                                                         UCT = -- + 1.41*sqrt(------)
             //                                                               ni                  ni
 
-            game.PrintAll();
+            //game.PrintAll();
             game.PlayoutGenerate();
+            // bắt đầu game tạo ra nút root
         }
 
         /// <summary>

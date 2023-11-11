@@ -20,6 +20,8 @@ namespace connect6
         public Board Board = new Board();
         public MCTS mcts = new MCTS();
 
+        public PieceType PC = PieceType.WHITE;
+
         /// <summary>
         /// 1 tượng trưng cho bước đầu tiên của Đen hoặc Trắng / 2 tượng trưng cho bước thứ hai của Đen hoặc Trắng
         /// </summary>
@@ -50,7 +52,6 @@ namespace connect6
         /// </summary>
         public PieceType Winner { get { return WinnerType; } }
 
-
         /// <summary>
         /// Xác định xem vị trí con trỏ có nằm trong phạm vi có thể thả hay không
         /// </summary>
@@ -71,20 +72,11 @@ namespace connect6
         /// <returns>Nếu không còn quân cờ nào khác thì tọa độ thực của thế cờ sẽ được trả về.，Nếu không thì quay lại null</returns>
         public Piece IsPlaceAPiece(int x, int y)
         {
-            Piece piece = Board.PlaceAPiece(x, y, CurrentPlayer, IsRedHint);
+            Piece piece = null;
+            piece = Board.PlaceAPiece(x, y, CurrentPlayer);
             
             if (piece != null)
             {
-                if (IsRedHint)
-                {
-                    //Lưu tạm quân cờ gốc cho nước đi này
-                    TempStorePiece = piece;
-
-                    CheckWinner();
-
-                    //Trả lại dấu nhắc màu đỏ
-                    return Board.RedHintPiece;
-                }
                 CheckWinner();
                 return piece;
             }
@@ -100,8 +92,8 @@ namespace connect6
             if (IsFirst)
             {
                 IsFirst = false;
-                // CurrentPlayer = PieceType.WHITE;
-                IsRedHint = true;
+                CurrentPlayer = PieceType.WHITE;
+                //IsRedHint = true;
             }
             else if (CurrentPlayer == PieceType.BLACK)
             {
@@ -113,35 +105,24 @@ namespace connect6
                 else if (NumStep == 2)
                 {
                     NumStep = 1;
-                    //CurrentPlayer = PieceType.WHITE;
+                    CurrentPlayer = PieceType.WHITE;
+                    IsRedHint = true;
+                }
+            } else if (CurrentPlayer == PieceType.WHITE)
+            {
+                // tới lượt máy đánh, gọi 2 lần
+                if (NumStep == 1)
+                {
+                    NumStep++;
+                    IsRedHint = false;
+                }
+                else if (NumStep == 2)
+                {
+                    NumStep = 1;
+                    CurrentPlayer = PieceType.BLACK;
                     IsRedHint = true;
                 }
             }
-            //else if (CurrentPlayer == PieceType.WHITE)
-            //{
-            //    if (NumStep == 1)
-            //    {
-            //        NumStep++;
-            //        IsRedHint = false;
-            //    }
-            //    else if (NumStep == 2)
-            //    {
-            //        NumStep = 1;
-            //        CurrentPlayer = PieceType.BLACK;
-            //        IsRedHint = true;
-            //    }
-            //}
-            //quy tắc
-            //if(IsBlack)
-            //{  
-            //    IsBlack = false;
-            //   return PieceType.BLACK;
-            //}
-            //else
-            //{
-            //    IsBlack = true;
-            //    return PieceType.WHITE;
-            //}
         }
 
         /// <summary>

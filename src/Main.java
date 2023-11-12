@@ -3,12 +3,12 @@ import java.awt.event.ActionListener;
 
 
 
-public class MainClass {
+public class Main {
 	
 	public static void main(String[] args) {
 		
 		// Create the MainGUI instance.
-		final int width = 760;
+		final int width = 600;
 		final MainGUI gui = new MainGUI(width,width, "GoMoku");
 		
 		// Create a 19x19 game board.

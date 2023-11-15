@@ -22,7 +22,7 @@ public class Minimax {
 
 	// This function calculates the relative score of the white player against the black.
 	// (i.e. how likely is white player to win the game before the black player)
-	// This value will be used as the score in the Minimax algorithm.
+	// This value will be used as the score in the MCTS algorithm.
 	public static double evaluateBoardForWhite(Board board, boolean blacksTurn) {
 		evaluationCount++; 
 		
@@ -70,8 +70,8 @@ public class Minimax {
 			move[0] = (Integer)(bestMove[1]);
 			move[1] = (Integer)(bestMove[2]);
 		} else {
-			// If there is no such move, search the minimax tree with specified depth.
-			bestMove = minimaxSearchAB(depth, new Board(board), true, -1.0, getWinScore());
+			// If there is no such move, search the MCTS tree with specified depth.
+			bestMove = MCTSSearchAB(depth, new Board(board), true, -1.0, getWinScore());
 			if(bestMove[1] == null) {
 				move = null;
 			} else {
@@ -93,7 +93,7 @@ public class Minimax {
 	 * beta : Best Player Move (Min)
 	 * returns: {score, move[0], move[1]}
 	 * */
-	private static Object[] minimaxSearchAB(int depth, Board dummyBoard, boolean max, double alpha, double beta) {
+	private static Object[] MCTSSearchAB(int depth, Board dummyBoard, boolean max, double alpha, double beta) {
 
 		// Last depth (terminal node), evaluate the current board score.
 		if(depth == 0) {
@@ -101,7 +101,7 @@ public class Minimax {
 			return x;
 		}
 		
-		// Generate all possible moves from this node of the Minimax Tree
+		// Generate all possible moves from this node of the MCTS Tree
 		/*
 		 *                  (Move 1)
 		 *	               /
@@ -119,7 +119,7 @@ public class Minimax {
 		
 		Object[] bestMove = new Object[3];
 		
-		// Generate Minimax Tree and calculate node scores.
+		// Generate MCTS Tree and calculate node scores.
 		if(max) {
 			// Initialize the starting best move with -infinity.
 			bestMove[0] = -1.0;
@@ -129,12 +129,12 @@ public class Minimax {
 				// Play the move on that temporary board without drawing anything
 				dummyBoard.addStoneNoGUI(move[1], move[0], false);
 				
-				// Call the minimax function for the next depth, to look for a minimum score.
-				// This function recursively generates new Minimax trees branching from this node 
+				// Call the MCTS function for the next depth, to look for a minimum score.
+				// This function recursively generates new MCTS trees branching from this node 
 				// (if the depth > 0) and searches for the minimum white score in each of the sub trees.
 				// We will find the maximum score of this depth, among the minimum scores found in the
 				// lower depth.
-				Object[] tempMove = minimaxSearchAB(depth-1, dummyBoard, false, alpha, beta);
+				Object[] tempMove = MCTSSearchAB(depth-1, dummyBoard, false, alpha, beta);
 
 				// backtrack and remove
 				dummyBoard.removeStoneNoGUI(move[1],move[0]);
@@ -178,12 +178,12 @@ public class Minimax {
 				// Play the move on that temporary board without drawing anything
 				dummyBoard.addStoneNoGUI(move[1], move[0], true);
 				
-				// Call the minimax function for the next depth, to look for a maximum score.
-				// This function recursively generates new Minimax trees branching from this node 
+				// Call the MCTS function for the next depth, to look for a maximum score.
+				// This function recursively generates new MCTS trees branching from this node 
 				// (if the depth > 0) and searches for the maximum white score in each of the sub trees.
 				// We will find the minimum score of this depth, among the maximum scores found in the
 				// lower depth.
-				Object[] tempMove = minimaxSearchAB(depth-1, dummyBoard, true, alpha, beta);
+				Object[] tempMove = MCTSSearchAB(depth-1, dummyBoard, true, alpha, beta);
 
 				dummyBoard.removeStoneNoGUI(move[1],move[0]);
 				

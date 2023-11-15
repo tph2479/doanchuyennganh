@@ -7,16 +7,17 @@ public class Game {
 	private Board board;
 	private boolean isPlayersTurn = true;
 	private boolean gameFinished = false;
-	private int minimaxDepth = 3;
+	private int MCTSDepth = 3;
 	private boolean aiStarts = true; // AI makes the first move
-	private Minimax ai;
+	private MCTS ai;
 	public static final String cacheFile = "score_cache.ser";
 	private int winner; // 0: There is no winner yet, 1: AI Wins, 2: Human Wins
-	
+	private boolean isFirst = true; // first start of game
+	private int turnCount = 1; // reached turnCount = 2, switch turn, reset to 1
 	
 	public Game(Board board) {
 		this.board = board;
-		ai = new Minimax(board);
+		ai = new MCTS(board);
 		
 		winner = 0;
 	}
@@ -24,8 +25,6 @@ public class Game {
 	 * 	Loads the cache and starts the game, enabling human player interactions.
 	 */
 	public void start() {
-		
-		
 		// If the AI is making the first move, place a white stone in the middle of the board.
 		if(aiStarts) playMove(board.getBoardSize()/2, board.getBoardSize()/2, false);
 		// Now it's human player's turn.
@@ -67,10 +66,10 @@ public class Game {
 		});
 	}
 	/*
-	 * 	Sets the depth of the minimax tree. (i.e. how many moves ahead should the AI calculate.)
+	 * 	Sets the depth of the MCTS tree. (i.e. how many moves ahead should the AI calculate.)
 	 */
 	public void setAIDepth(int depth) {
-		this.minimaxDepth = depth;
+		this.MCTSDepth = depth;
 		
 	}
 	public void setAIStarts(boolean aiStarts) {
@@ -89,13 +88,25 @@ public class Game {
 			int posX = board.getRelativePos( e.getX() );
 			int posY = board.getRelativePos( e.getY() );
 			
-			// Place a black stone to that cell.
 			if(!playMove(posX, posY, true)) {
 				// If the cell is already populated, do nothing.
 				isPlayersTurn = true;
 				return;
 			}
 			
+			if(isFirst) {
+				System.out.println("First time run");
+				isFirst = false;
+				isPlayersTurn = true;
+			} else if(turnCount < 2) {
+				System.out.println(isPlayersTurn ? "Player" : "Al" + " turn");
+				turnCount++;
+				isPlayersTurn = true;
+				return;
+			}
+			
+			turnCount = 1; // switch turn
+						
 			// Check if the last move ends the game.
 			winner = checkWinner();
 			
@@ -107,7 +118,7 @@ public class Game {
 			}
 			
 			// Make the AI instance calculate a move.
-			int[] aiMove = ai.calculateNextMove(minimaxDepth);
+			int[] aiMove = ai.calculateNextMove(MCTSDepth);
 			
 			if(aiMove == null) {
 				System.out.println("No possible moves left. Game Over.");
@@ -116,11 +127,10 @@ public class Game {
 				return;
 			}
 			
-			
 			// Place a black stone to the found cell.
 			playMove(aiMove[1], aiMove[0], false);
 			
-			System.out.println("Black: " + Minimax.getScore(board,true,true) + " White: " + Minimax.getScore(board,false,true));
+			System.out.println("Black: " + MCTS.getScore(board,true,true) + " White: " + MCTS.getScore(board,false,true));
 			
 			winner = checkWinner();
 			
@@ -136,7 +146,38 @@ public class Game {
 				board.printWinner(0); // Prints "TIED!"
 				gameFinished = true;
 				return;
-				
+			}
+			
+			// buoc 2
+			// Make the AI instance calculate a move.
+			aiMove = ai.calculateNextMove(MCTSDepth);
+			
+			if(aiMove == null) {
+				System.out.println("No possible moves left. Game Over.");
+				board.printWinner(0); // Prints "TIED!"
+				gameFinished = true;
+				return;
+			}
+			
+			// Place a black stone to the found cell.
+			playMove(aiMove[1], aiMove[0], false);
+			
+			System.out.println("Black: " + MCTS.getScore(board,true,true) + " White: " + MCTS.getScore(board,false,true));
+			
+			winner = checkWinner();
+			
+			if(winner == 1) {
+				System.out.println("AI WON!");
+				board.printWinner(winner);
+				gameFinished = true;
+				return;
+			}
+			
+			if(board.generateMoves().size() == 0) {
+				System.out.println("No possible moves left. Game Over.");
+				board.printWinner(0); // Prints "TIED!"
+				gameFinished = true;
+				return;
 			}
 			
 			isPlayersTurn = true;
@@ -144,8 +185,8 @@ public class Game {
 		
 	}
 	private int checkWinner() {
-		if(Minimax.getScore(board, true, false) >= Minimax.getWinScore()) return 2;
-		if(Minimax.getScore(board, false, true) >= Minimax.getWinScore()) return 1;
+		if(MCTS.getScore(board, true, false) >= MCTS.getWinScore()) return 2;
+		if(MCTS.getScore(board, false, true) >= MCTS.getWinScore()) return 1;
 		return 0;
 	}
 	private boolean playMove(int posX, int posY, boolean black) {

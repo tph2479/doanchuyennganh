@@ -12,7 +12,7 @@ public class Main {
 		final MainGUI gui = new MainGUI(width,width, "GoMoku");
 		
 		// Create a 19x19 game board.
-		Board board = new Board(width, 10);
+		Board board = new Board(width, 19);
 		
 		// Create the Game manager instance.
 		final Game game = new Game(board);

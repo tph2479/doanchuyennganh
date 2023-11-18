@@ -40,7 +40,6 @@ public class MCTS {
 	// (i.e. How good a player's general standing on the board by considering how many 
 	//  consecutive 2's, 3's, 4's it has, how many of them are blocked etc...)
 	public static int getScore(Board board, boolean forBlack, boolean blacksTurn) {
-		
 		// Read the board
 		int[][] boardMatrix = board.getBoardMatrix();
 
@@ -357,18 +356,16 @@ public class MCTS {
 	// count: Number of consecutive stones in the set
 	// blocks: Number of blocked sides of the set (2: both sides blocked, 1: single side blocked, 0: both sides free)
 	public static  int getConsecutiveSetScore(int count, int blocks, boolean currentTurn) {
-		final int winGuarantee = 1000000;
+		final int winGuarantee = 1_000_000;
 		// If both sides of a set is blocked, this set is worthless return 0 points.
-		if(blocks == 2 && count < 5) return 0;
+		if(blocks == 2 && count < 6) return 0;
 
 		switch(count) {
-		case 5: {
-			// 5 consecutive wins the game
+		case 6: {
 			return WIN_SCORE;
 		}
-		case 4: {
-			// 4 consecutive stones in the user's turn guarantees a win.
-			// (User can win the game by placing the 5th stone after the set)
+		case 5: {
+			// 5 consecutive wins the game
 			if(currentTurn) return winGuarantee;
 			else {
 				// Opponent's turn
@@ -377,7 +374,28 @@ public class MCTS {
 				// If only a single side is blocked, 4 consecutive stones limits the opponents move
 				// (Opponent can only place a stone that will block the remaining side, otherwise the game is lost
 				// in the next turn). So a relatively high score is given for this set.
-				else return 200;
+				else return 300;
+			}
+		}
+		case 4: {
+			// 4 consecutive stones in the user's turn guarantees a win.
+			// (User can win the game by placing the 5th stone after the set)
+			if(blocks == 0) {
+				// Neither side is blocked.
+				// If it's the current player's turn, a win is guaranteed in the next 2 turns.
+				// (User places another stone to make the set 4 consecutive, opponent can only block one side)
+				// However the opponent may win the game in the next turn therefore this score is lower than win
+				// guaranteed scores but still a very high score.
+				if(currentTurn) return 50_000;
+				// If it's the opponent's turn, this set forces opponent to block one of the sides of the set.
+				// So a relatively high score is given for this set.
+				else return 250;
+			}
+			else {
+				// One of the sides is blocked.
+				// Playmaker scores
+				if(currentTurn) return 20;
+				else return 15;
 			}
 		}
 		case 3: {
@@ -388,7 +406,7 @@ public class MCTS {
 				// (User places another stone to make the set 4 consecutive, opponent can only block one side)
 				// However the opponent may win the game in the next turn therefore this score is lower than win
 				// guaranteed scores but still a very high score.
-				if(currentTurn) return 50_000;
+				if(currentTurn) return 25_000;
 				// If it's the opponent's turn, this set forces opponent to block one of the sides of the set.
 				// So a relatively high score is given for this set.
 				else return 200;
@@ -416,7 +434,7 @@ public class MCTS {
 		}
 		}
 
-		// More than 5 consecutive stones? 
+		// More than 6 consecutive stones? 
 		return WIN_SCORE*2;
 	}
 }

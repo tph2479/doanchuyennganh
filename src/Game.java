@@ -18,7 +18,6 @@ public class Game {
 	public Game(Board board) {
 		this.board = board;
 		ai = new MCTS(board);
-		
 		winner = 0;
 	}
 	/*
@@ -96,7 +95,6 @@ public class Game {
 			
 			if(isFirst) {
 				System.out.println("First time run");
-				isFirst = false;
 				isPlayersTurn = true;
 			} else if(turnCount < 2) {
 				System.out.println(isPlayersTurn ? "Player" : "Al" + " turn");
@@ -108,6 +106,7 @@ public class Game {
 			turnCount = 1; // switch turn
 						
 			// Check if the last move ends the game.
+			// kiểm tra bước đánh của người chơi có thắng không
 			winner = checkWinner();
 			
 			if(winner == 2) {
@@ -132,6 +131,7 @@ public class Game {
 			
 			System.out.println("Black: " + MCTS.getScore(board,true,true) + " White: " + MCTS.getScore(board,false,true));
 			
+			// kiểm tra nước đánh của máy có thắng không
 			winner = checkWinner();
 			
 			if(winner == 1) {
@@ -148,11 +148,17 @@ public class Game {
 				return;
 			}
 			
-			// buoc 2
-			// Make the AI instance calculate a move.
-			aiMove = ai.calculateNextMove(MCTSDepth);
+			if(isFirst) {
+				isFirst = false;
+				return;
+			}
 			
-			if(aiMove == null) {
+			
+			// NƯỚC ĐÁNH THỨ 2
+			// Make the AI instance calculate a move.
+			int[] aiMove2 = ai.calculateNextMove(MCTSDepth);
+			
+			if(aiMove2 == null) {
 				System.out.println("No possible moves left. Game Over.");
 				board.printWinner(0); // Prints "TIED!"
 				gameFinished = true;
@@ -160,10 +166,11 @@ public class Game {
 			}
 			
 			// Place a black stone to the found cell.
-			playMove(aiMove[1], aiMove[0], false);
+			playMove(aiMove2[1], aiMove2[0], false);
 			
 			System.out.println("Black: " + MCTS.getScore(board,true,true) + " White: " + MCTS.getScore(board,false,true));
 			
+			// kiểm tra nước thứ 2 máy đánh có thắng không
 			winner = checkWinner();
 			
 			if(winner == 1) {

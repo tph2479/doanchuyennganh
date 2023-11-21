@@ -9,7 +9,7 @@ public class Main {
 		
 		// Create the MainGUI instance.
 		final int width = 600;
-		final MainGUI gui = new MainGUI(width,width, "GoMoku");
+		final MainGUI gui = new MainGUI(width,width, "Connect 6");
 		
 		// Create a 19x19 game board.
 		Board board = new Board(width, 19);

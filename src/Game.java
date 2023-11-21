@@ -107,7 +107,7 @@ public class Game {
 						
 			// Check if the last move ends the game.
 			// kiểm tra bước đánh của người chơi có thắng không
-			winner = checkWinner();
+			winner = checkWinner(board);
 			
 			if(winner == 2) {
 				System.out.println("Player WON!");
@@ -132,7 +132,7 @@ public class Game {
 			System.out.println("Black: " + MCTS.getScore(board,true,true) + " White: " + MCTS.getScore(board,false,true));
 			
 			// kiểm tra nước đánh của máy có thắng không
-			winner = checkWinner();
+			winner = checkWinner(board);
 			
 			if(winner == 1) {
 				System.out.println("AI WON!");
@@ -171,7 +171,7 @@ public class Game {
 			System.out.println("Black: " + MCTS.getScore(board,true,true) + " White: " + MCTS.getScore(board,false,true));
 			
 			// kiểm tra nước thứ 2 máy đánh có thắng không
-			winner = checkWinner();
+			winner = checkWinner(board);
 			
 			if(winner == 1) {
 				System.out.println("AI WON!");
@@ -191,13 +191,16 @@ public class Game {
 		}
 		
 	}
-	private int checkWinner() {
+	public static int checkWinner(Board board) {
+		// kiểm tra đen (người chơi), lượt của đen
 		if(MCTS.getScore(board, true, false) >= MCTS.getWinScore()) return 2;
+		
+		// kiểm tra trắng (máy) lượt của trắng
 		if(MCTS.getScore(board, false, true) >= MCTS.getWinScore()) return 1;
 		return 0;
 	}
+	
 	private boolean playMove(int posX, int posY, boolean black) {
 		return board.addStone(posX, posY, black);
-	}
-	
+	}	
 }

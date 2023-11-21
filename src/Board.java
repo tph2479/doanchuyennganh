@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 
 public class Board {
-	
 	private BoardGUI gui;
 	private int[][] boardMatrix; // 0: Empty 1: White 2: Black
 	
@@ -128,6 +127,10 @@ public class Board {
 	}
 	public void thinkingFinished() {
 		gui.setAIThinking(false);
+	}
+	public int checkStatus() {
+		
+		return 0;
 	}
 	
 	

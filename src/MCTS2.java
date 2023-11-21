@@ -1,8 +1,7 @@
 import java.util.ArrayList;
-import java.util.List;
 
 
-public class MCTS {
+public class MCTS2 {
 	// This variable is used to track the number of evaluations for benchmarking purposes.
 	public static int evaluationCount = 0;
 	// Board instance is responsible for board mechanics
@@ -11,7 +10,7 @@ public class MCTS {
 	private static final int WIN_SCORE = 100_000_000;
 
 	// Constructor
-	public MCTS(Board board) {
+	public MCTS2(Board board) {
 		this.board = board;
 	}
 	
@@ -70,7 +69,7 @@ public class MCTS {
 			move[1] = (Integer)(bestMove[2]);
 		} else {
 			// If there is no such move, search the MCTS tree with specified depth.
-			bestMove = MCTSSearch();
+			bestMove = MCTSSearchAB(depth, new Board(board), true, -1.0, getWinScore());
 			if(bestMove[1] == null) {
 				move = null;
 			} else {
@@ -88,98 +87,135 @@ public class MCTS {
 	
 	
 	/*
+	 * alpha : Best AI Move (Max)
+	 * beta : Best Player Move (Min)
 	 * returns: {score, move[0], move[1]}
 	 * */
-	private Object[] MCTSSearch() {
-		Object[] bestMove = {0, null, null};
-		
-		Tree tree = new Tree();
-		Node rootNode = tree.getRoot();
-		rootNode.getState().setBoard(board);
-        rootNode.getState().setPlayerType(PlayerType.AL); // PC 
-		
-        long end = System.currentTimeMillis() + 500;
-//		while (System.currentTimeMillis() < end) {
-            Node promisingNode = selectPromisingNode(rootNode);
-            
-//            print(promisingNode.getState().getBoard());
-//            System.out.println("DEBUG UCT: " + UCT.uctValue(1, 0, 1));
-//            if (promisingNode.getState().getBoard().checkStatus() 
-//              == Board.IN_PROGRESS) {
-                expandNode(promisingNode);
-//            }
-//            print(selectPromisingNode(rootNode).getState().getBoard());
-            Node nodeToExplore = promisingNode;
-            if (promisingNode.getChildArray().size() > 0) {
-                nodeToExplore = promisingNode.getRandomChildNode();
-            }
-            //print(nodeToExplore.getState().getBoard());
-            int playoutResult = simulateRandomPlayout(nodeToExplore);
-//            backPropogation(nodeToExplore, playoutResult);
-//        }
+	private static Object[] MCTSSearchAB(int depth, Board dummyBoard, boolean max, double alpha, double beta) {
 
-//        Node winnerNode = rootNode.getChildWithMaxScore();
-//        tree.setRoot(winnerNode);
-//        return winnerNode.getState().getBoard();
+		// Last depth (terminal node), evaluate the current board score.
+		if(depth == 0) {
+			Object[] x = {evaluateBoardForWhite(dummyBoard, !max), null, null};
+			return x;
+		}
 		
-		// Return the best move found
+		// Generate all possible moves from this node of the MCTS Tree
+		/*
+		 *                  (Move 1)
+		 *	               /
+		 *  (Current Node) --- (Move 2)
+		 *				   \   ...
+		 *                  (Move N)
+		 */
+		ArrayList<int[]> allPossibleMoves = dummyBoard.generateMoves();
+		
+		// If there is no possible move left, treat this node as a terminal node and return the score.
+		if(allPossibleMoves.size() == 0) {
+			Object[] x = {evaluateBoardForWhite(dummyBoard, !max), null, null};
+			return x;
+		}
+		
+		Object[] bestMove = new Object[3];
+		
+		// Generate MCTS Tree and calculate node scores.
+		if(max) {
+			// Initialize the starting best move with -infinity.
+			bestMove[0] = -1.0;
+			// Iterate for all possible moves that can be made.
+			for(int[] move : allPossibleMoves) {
+
+				// Play the move on that temporary board without drawing anything
+				dummyBoard.addStoneNoGUI(move[1], move[0], false);
+				
+				// Call the MCTS function for the next depth, to look for a minimum score.
+				// This function recursively generates new MCTS trees branching from this node 
+				// (if the depth > 0) and searches for the minimum white score in each of the sub trees.
+				// We will find the maximum score of this depth, among the minimum scores found in the
+				// lower depth.
+				Object[] tempMove = MCTSSearchAB(depth-1, dummyBoard, false, alpha, beta);
+
+				// backtrack and remove
+				dummyBoard.removeStoneNoGUI(move[1],move[0]);
+
+				// Updating alpha (alpha value holds the maximum score)
+				// When searching for the minimum, if the score of a node is lower than the alpha 
+				// (max score of uncle nodes from one upper level) the whole subtree originating
+				// from that node will be discarded, since the maximizing player will choose the 
+				// alpha node over any node with a score lower than the alpha. 
+				if((Double)(tempMove[0]) > alpha) {
+					alpha = (Double)(tempMove[0]);
+				}
+				// Pruning with beta
+				// Beta value holds the minimum score among the uncle nodes from one upper level.
+				// We need to find a score lower than this beta score, because any score higher than
+				// beta will be eliminated by the minimizing player (upper level). If the score is
+				// higher than (or equal to) beta, break out of loop discarding any remaining nodes 
+				// and/or subtrees and return the last move.
+				if((Double)(tempMove[0]) >= beta) {
+					return tempMove;
+				}
+
+				// Find the move with the maximum score.
+				if((Double)tempMove[0] > (Double)bestMove[0]) {
+					bestMove = tempMove;
+					bestMove[1] = move[0];
+					bestMove[2] = move[1];
+				}
+			}
+		}
+		else {
+			// Initialize the starting best move using the first move in the list and +infinity score.
+			bestMove[0] = 100_000_000.0;
+			bestMove[1] = allPossibleMoves.get(0)[0];
+			bestMove[2] = allPossibleMoves.get(0)[1];
+			
+			// Iterate for all possible moves that can be made.
+			for(int[] move : allPossibleMoves) {
+				// Create a temporary board that is equivalent to the current board
+
+				// Play the move on that temporary board without drawing anything
+				dummyBoard.addStoneNoGUI(move[1], move[0], true);
+				
+				// Call the MCTS function for the next depth, to look for a maximum score.
+				// This function recursively generates new MCTS trees branching from this node 
+				// (if the depth > 0) and searches for the maximum white score in each of the sub trees.
+				// We will find the minimum score of this depth, among the maximum scores found in the
+				// lower depth.
+				Object[] tempMove = MCTSSearchAB(depth-1, dummyBoard, true, alpha, beta);
+
+				dummyBoard.removeStoneNoGUI(move[1],move[0]);
+				
+				// Updating beta (beta value holds the minimum score)
+				// When searching for the maximum, if the score of a node is higher than the beta 
+				// (min score of uncle nodes from one upper level) the whole subtree originating
+				// from that node will be discarded, since the minimizing player will choose the 
+				// beta node over any node with a score higher than the beta. 
+				if(((Double)tempMove[0]) < beta) {
+					beta = (Double)(tempMove[0]);
+				}
+				// Pruning with alpha
+				// Alpha value holds the maximum score among the uncle nodes from one upper level.
+				// We need to find a score higher than this alpha score, because any score lower than
+				// alpha will be eliminated by the maximizing player (upper level). If the score is
+				// lower than (or equal to) alpha, break out of loop discarding any remaining nodes 
+				// and/or subtrees and return the last move.
+				if((Double)(tempMove[0]) <= alpha) {
+					return tempMove;
+				}
+				
+				// Find the move with the minimum score.
+				if((Double)tempMove[0] < (Double)bestMove[0]) {
+					bestMove = tempMove;
+					bestMove[1] = move[0];
+					bestMove[2] = move[1];
+				}
+			}
+		}
+
+		// Return the best move found in this depth
 		return bestMove;
 	}
 	
-//	private void backPropogation(Node nodeToExplore, int playerNo) {
-//	    Node tempNode = nodeToExplore;
-//	    while (tempNode != null) {
-//	        tempNode.getState().incrementVisit();
-//	        if (tempNode.getState().getPlayerNo() == playerNo) {
-//	            tempNode.getState().addScore(WIN_SCORE);
-//	        }
-//	        tempNode = tempNode.getParent();
-//	    }
-//	}
-	
-	private int simulateRandomPlayout(Node node) {
-		Node tempNode = new Node(node);
-	    State tempState = tempNode.getState();
-	    int boardStatus = tempState.getBoard().checkStatus();
-//	    if (boardStatus == opponent) {
-//	        tempNode.getParent().getState().setWinScore(Integer.MIN_VALUE);
-//	        return boardStatus;
-//	    }
-//	    while (boardStatus == Board.IN_PROGRESS) {
-//	        tempState.togglePlayer();
-//	        tempState.randomPlay();
-//	        boardStatus = tempState.getBoard().checkStatus();
-//	    }
-	    return boardStatus;
-	}
-
-	private void expandNode(Node node) {
-		List<State> possibleStates = node.getState().getAllPossibleStates();
-	    possibleStates.forEach(state -> {
-	        Node newNode = new Node(state);
-	        newNode.setParent(node);
-	        newNode.getState().setPlayerType(node.getState().getOpponent());
-	        node.getChildArray().add(newNode);
-	    });
-	}
-
-	private Node selectPromisingNode(Node rootNode) {
-		Node node = rootNode;
-		while (node.getChildArray().size() != 0) {
-			node = UCT.findBestNodeWithUCT(node);
-		}
-		return node;
-	}
-
-	private void print(Board board2) {
-		for(int i = 0; i < board2.getBoardSize(); i++) {
-			for(int j = 0; j < board2.getBoardSize(); j++) {
-				System.out.print(board2.getBoardMatrix()[i][j] + " ");
-			}
-			System.out.println();
-		}
-	}
-
 	// This function looks for a move that can instantly win the game.
 	private static Object[] searchWinningMove(Board board) {
 		ArrayList<int[]> allPossibleMoves = board.generateMoves();

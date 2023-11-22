@@ -8,7 +8,7 @@ public class Main {
 	public static void main(String[] args) {
 		
 		// Create the MainGUI instance.
-		final int width = 600;
+		final int width = 400;
 		final MainGUI gui = new MainGUI(width,width, "Connect 6");
 		
 		// Create a 19x19 game board.

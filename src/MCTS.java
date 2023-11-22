@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 
 public class MCTS {
@@ -50,7 +51,7 @@ public class MCTS {
 	}
 	
 	// This function is used to get the next intelligent move to make for the AI.
-	public int[] calculateNextMove(int depth) {
+	public int[] calculateNextMove(boolean aiStarts) {
 		// Block the board for AI to make a decision.
 		board.thinkingStarted();
 
@@ -70,7 +71,7 @@ public class MCTS {
 			move[1] = (Integer)(bestMove[2]);
 		} else {
 			// If there is no such move, search the MCTS tree with specified depth.
-			bestMove = MCTSSearch();
+			bestMove = MCTSSearch(aiStarts);
 			if(bestMove[1] == null) {
 				move = null;
 			} else {
@@ -90,16 +91,19 @@ public class MCTS {
 	/*
 	 * returns: {score, move[0], move[1]}
 	 * */
-	private Object[] MCTSSearch() {
+	private Object[] MCTSSearch(boolean aiStarts) {
 		Object[] bestMove = {0, null, null};
 		
 		Tree tree = new Tree();
 		Node rootNode = tree.getRoot();
 		rootNode.getState().setBoard(board);
-        rootNode.getState().setPlayerType(PlayerType.AL); // PC 
+		rootNode.getState().setPlayerType(aiStarts ? PlayerType.AL : PlayerType.PLAYER);
+        // root là người chơi đánh
 		
         long end = System.currentTimeMillis() + 500;
+        int i = 100;
 //		while (System.currentTimeMillis() < end) {
+        while (i-- > 0) {
             Node promisingNode = selectPromisingNode(rootNode);
             
 //            print(promisingNode.getState().getBoard());
@@ -108,43 +112,70 @@ public class MCTS {
 //              == Board.IN_PROGRESS) {
                 expandNode(promisingNode);
 //            }
-//            print(selectPromisingNode(rootNode).getState().getBoard());
+            //print(selectPromisingNode(rootNode).getState().getBoard());
             Node nodeToExplore = promisingNode;
             if (promisingNode.getChildArray().size() > 0) {
                 nodeToExplore = promisingNode.getRandomChildNode();
             }
-            //print(nodeToExplore.getState().getBoard());
-            int playoutResult = simulateRandomPlayout(nodeToExplore);
-//            backPropogation(nodeToExplore, playoutResult);
-//        }
+            print(nodeToExplore.getState().getBoard());
+            int playoutResult = simulateRandomPlayout(nodeToExplore, aiStarts);
+            System.out.println("DK: " + playoutResult);
+            if(aiStarts)
+            	backPropogation(nodeToExplore, playoutResult == 1 ? PlayerType.AL : PlayerType.PLAYER);
+            else
+            	backPropogation(nodeToExplore, playoutResult == 1 ? PlayerType.PLAYER : PlayerType.AL);
+        }
 
-//        Node winnerNode = rootNode.getChildWithMaxScore();
-//        tree.setRoot(winnerNode);
+        Node winnerNode = rootNode.getChildWithMaxScore();
+        tree.setRoot(winnerNode);
 //        return winnerNode.getState().getBoard();
 		
 		// Return the best move found
+        
+        bestMove[0] = winnerNode.getState().getWinScore();
+        bestMove[1] = winnerNode.getState().getBoard().getLastMove()[0];
+        bestMove[2] = winnerNode.getState().getBoard().getLastMove()[1];
 		return bestMove;
 	}
 	
-//	private void backPropogation(Node nodeToExplore, int playerNo) {
-//	    Node tempNode = nodeToExplore;
-//	    while (tempNode != null) {
-//	        tempNode.getState().incrementVisit();
-//	        if (tempNode.getState().getPlayerNo() == playerNo) {
-//	            tempNode.getState().addScore(WIN_SCORE);
-//	        }
-//	        tempNode = tempNode.getParent();
-//	    }
-//	}
+	private void backPropogation(Node nodeToExplore, PlayerType playerType) {
+	    Node tempNode = nodeToExplore;
+	    while (tempNode != null) {
+	        tempNode.getState().incrementVisit();
+	        if (tempNode.getState().getPlayerType() == playerType) {
+	            tempNode.getState().addWinScore(1);
+	        }
+	        tempNode = tempNode.getParent();
+	    }
+	}
 	
-	private int simulateRandomPlayout(Node node) {
+	private int simulateRandomPlayout(Node node, boolean aiStarts) {
 		Node tempNode = new Node(node);
 	    State tempState = tempNode.getState();
-	    int boardStatus = tempState.getBoard().checkStatus();
+//	    int boardStatus = tempState.getBoard().checkStatus();
+	    int boardStatus = Game.checkWinner(tempState.getBoard());
+	    // 0 chưa kết luận, 1 máy thắng, 2 người chơi thắng
+	    if(boardStatus == (aiStarts ? 1 : 2)) {
+	    	// nếu người chơi thắng thì không tính nước này nữa
+	    	tempNode.getParent().getState().setWinScore(Integer.MIN_VALUE);
+	    	return boardStatus;
+	    }
+	    
 //	    if (boardStatus == opponent) {
 //	        tempNode.getParent().getState().setWinScore(Integer.MIN_VALUE);
 //	        return boardStatus;
 //	    }
+//	    Scanner reader = new Scanner(System.in);
+	    boolean filled = false;
+	    while (boardStatus == 0) {
+	    	filled = tempState.randomPlay();
+	    	if(filled == true)
+	    		break;
+//	    	print(tempState.getBoard());
+//	    	reader.nextLine();
+	    	boardStatus = Game.checkWinner(tempState.getBoard());
+	    	tempState.togglePlayer();
+	    }
 //	    while (boardStatus == Board.IN_PROGRESS) {
 //	        tempState.togglePlayer();
 //	        tempState.randomPlay();

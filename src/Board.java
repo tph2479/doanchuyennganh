@@ -6,6 +6,7 @@ import java.util.ArrayList;
 public class Board {
 	private BoardGUI gui;
 	private int[][] boardMatrix; // 0: Empty 1: White 2: Black
+	private Object[] lastMove = new Object[2];
 	
 	
 	public Board(int sideLength, int boardSize) {
@@ -132,6 +133,11 @@ public class Board {
 		
 		return 0;
 	}
-	
-	
+	public void setLastMove(int[] lastMove) {
+		this.lastMove[0] = lastMove[0];
+		this.lastMove[1] = lastMove[1];
+	}
+	public Object[] getLastMove() {
+		return lastMove;
+	}
 }

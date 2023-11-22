@@ -87,7 +87,7 @@ public class Game {
 			int posX = board.getRelativePos( e.getX() );
 			int posY = board.getRelativePos( e.getY() );
 			
-			if(!playMove(posX, posY, true)) {
+			if(!playMove(posX, posY, aiStarts)) {
 				// If the cell is already populated, do nothing.
 				isPlayersTurn = true;
 				return;
@@ -117,7 +117,7 @@ public class Game {
 			}
 			
 			// Make the AI instance calculate a move.
-			int[] aiMove = ai.calculateNextMove(MCTSDepth);
+			int[] aiMove = ai.calculateNextMove(aiStarts);
 			
 			if(aiMove == null) {
 				System.out.println("No possible moves left. Game Over.");
@@ -127,7 +127,7 @@ public class Game {
 			}
 			
 			// Place a black stone to the found cell.
-			playMove(aiMove[1], aiMove[0], false);
+			playMove(aiMove[1], aiMove[0], !aiStarts);
 			
 			System.out.println("Black: " + MCTS.getScore(board,true,true) + " White: " + MCTS.getScore(board,false,true));
 			
@@ -156,7 +156,7 @@ public class Game {
 			
 			// NƯỚC ĐÁNH THỨ 2
 			// Make the AI instance calculate a move.
-			int[] aiMove2 = ai.calculateNextMove(MCTSDepth);
+			int[] aiMove2 = ai.calculateNextMove(aiStarts);
 			
 			if(aiMove2 == null) {
 				System.out.println("No possible moves left. Game Over.");
@@ -166,7 +166,7 @@ public class Game {
 			}
 			
 			// Place a black stone to the found cell.
-			playMove(aiMove2[1], aiMove2[0], false);
+			playMove(aiMove2[1], aiMove2[0], !aiStarts);
 			
 			System.out.println("Black: " + MCTS.getScore(board,true,true) + " White: " + MCTS.getScore(board,false,true));
 			

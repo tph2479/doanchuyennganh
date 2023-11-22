@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -18,9 +20,9 @@ public class Node {
     }
 
 	public Node(Node node) {
-		this.state = new State(node.getState());
 		this.parent = node.getParent();
 		this.childArray = node.getChildArray();
+		this.state = new State(node.getState());
 	}
 
 	public State getState() {
@@ -45,6 +47,9 @@ public class Node {
 	public Node getRandomChildNode() {
 		return childArray.get(ThreadLocalRandom.current().nextInt(childArray.size()));
 	}
-	
-	
+
+	public Node getChildWithMaxScore() {
+		return Collections.max(childArray, Comparator
+				.comparing(c -> c.getState().getWinScore()));
+	}
 }

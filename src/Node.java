@@ -49,7 +49,6 @@ public class Node {
 	}
 
 	public Node getChildWithMaxScore() {
-		return Collections.max(childArray, Comparator
-				.comparing(c -> c.getState().getWinScore()));
+		return UCT.findBestNodeWithUCT(this);
 	}
 }

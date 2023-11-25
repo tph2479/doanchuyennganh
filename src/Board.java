@@ -51,6 +51,9 @@ public class Board {
 		// Look for cells that has at least one stone in an adjacent cell.
 		for(int i=0; i<boardSize; i++) {
 			for(int j=0; j<boardSize; j++) {
+//				if(boardMatrix[i][j] == 0) {
+//					moveList.add(new int[] {i,j})
+//				}
 				
 				if(boardMatrix[i][j] > 0) continue;
 				
@@ -120,8 +123,8 @@ public class Board {
 	public int getRelativePos(int x) {
 		return gui.getRelativePos(x);
 	}
-	public void printWinner(int winner) {
-		gui.printWinner(winner);
+	public void printWinner(int winner, boolean aiStarts) {
+		gui.printWinner(winner, aiStarts);
 	}
 	public void thinkingStarted() {
 		gui.setAIThinking(true);

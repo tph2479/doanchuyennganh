@@ -31,8 +31,8 @@ public class State {
 			if (dummyBoard.getBoardMatrix()[state[1]][state[0]] != 0) {
 				continue;
 			}
-			dummyBoard.setLastMove(state);
-			dummyBoard.addStoneNoGUI(state[0], state[1], playerType == PlayerType.PLAYER);
+			//dummyBoard.setLastMove(state);
+			dummyBoard.addStoneNoGUI(state[0], state[1], playerType != PlayerType.PLAYER);
 			states.add(new State(dummyBoard, visitCount, winScore));
 			dummyBoard = new Board(board);
 		}
@@ -56,7 +56,7 @@ public class State {
 		for (int i = 0; i < boardMatrix.length; i++) {
 			for (int j = 0; j < boardMatrix.length; j++) {
 				if (boardMatrix[i][j] == 0) {
-					boardMatrix[i][j] = playerType == PlayerType.AL ? 1 : 2;
+					boardMatrix[i][j] = playerType == PlayerType.PLAYER ? 1 : 2;
 					return false;
 				}
 			}

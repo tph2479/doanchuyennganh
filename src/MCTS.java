@@ -8,12 +8,19 @@ public class MCTS {
 	public static int evaluationCount = 0;
 	// Board instance is responsible for board mechanics
 	private Board board;
+	private boolean aiStarts;
 	// Win score should be greater than all possible board scores
 	private static final int WIN_SCORE = 100_000_000;
+	private int moveCount = 1;
 
 	// Constructor
-	public MCTS(Board board) {
+	public MCTS(Board board, boolean aiStarts) {
 		this.board = board;
+		this.aiStarts = aiStarts;
+	}
+	
+	public void setAIStarts(boolean aiStarts) {
+		this.aiStarts = aiStarts;
 	}
 	
 	// Getter function for the winScore 
@@ -51,14 +58,14 @@ public class MCTS {
 	}
 	
 	// This function is used to get the next intelligent move to make for the AI.
-	public int[] calculateNextMove(boolean aiStarts) {
+	public int[] calculateNextMove(int moveCount, boolean isFirst) {
 		// Block the board for AI to make a decision.
 		board.thinkingStarted();
 
 		int[] move = new int[2];
 
 		// Used for benchmarking purposes only.
-		long startTime = System.currentTimeMillis();
+//		long startTime = System.currentTimeMillis();
 
 		// Check if any available move can finish the game to make sure the AI always
 		// takes the opportunity to finish the game.
@@ -71,7 +78,8 @@ public class MCTS {
 			move[1] = (Integer)(bestMove[2]);
 		} else {
 			// If there is no such move, search the MCTS tree with specified depth.
-			bestMove = MCTSSearch(aiStarts);
+			this.moveCount = moveCount;
+			bestMove = MCTSSearch(isFirst);
 			if(bestMove[1] == null) {
 				move = null;
 			} else {
@@ -79,7 +87,7 @@ public class MCTS {
 				move[1] = (Integer)(bestMove[2]);
 			}
 		}
-		System.out.println("Cases calculated: " + evaluationCount + " Calculation time: " + (System.currentTimeMillis() - startTime) + " ms");
+//		System.out.println("Cases calculated: " + evaluationCount + " Calculation time: " + (System.currentTimeMillis() - startTime) + " ms");
 		board.thinkingFinished();
 		
 		evaluationCount=0;
@@ -91,26 +99,30 @@ public class MCTS {
 	/*
 	 * returns: {score, move[0], move[1]}
 	 * */
-	private Object[] MCTSSearch(boolean aiStarts) {
+	private Object[] MCTSSearch(boolean isFirst) {
 		Object[] bestMove = {0, null, null};
 		
 		Tree tree = new Tree();
 		Node rootNode = tree.getRoot();
 		rootNode.getState().setBoard(board);
-		rootNode.getState().setPlayerType(aiStarts ? PlayerType.AL : PlayerType.PLAYER);
+		rootNode.getState().setPlayerType(PlayerType.PLAYER);
         // root là người chơi đánh
+		// nếu ai đánh trước thì board là player
+		// nếu ai đánh sau thì board là người chơi
 		
-        long end = System.currentTimeMillis() + 500;
-        int i = 100;
-//		while (System.currentTimeMillis() < end) {
-        while (i-- > 0) {
+        long end = System.currentTimeMillis() + 1000;
+        int i = 0;
+		while (System.currentTimeMillis() < end) {
+			i++;
+//        while (i-- > 0) {
             Node promisingNode = selectPromisingNode(rootNode);
             
 //            print(promisingNode.getState().getBoard());
 //            System.out.println("DEBUG UCT: " + UCT.uctValue(1, 0, 1));
 //            if (promisingNode.getState().getBoard().checkStatus() 
 //              == Board.IN_PROGRESS) {
-                expandNode(promisingNode);
+                expandNode(promisingNode, isFirst);
+                isFirst = false;
 //            }
             //print(selectPromisingNode(rootNode).getState().getBoard());
             Node nodeToExplore = promisingNode;
@@ -118,26 +130,31 @@ public class MCTS {
                 nodeToExplore = promisingNode.getRandomChildNode();
             }
             print(nodeToExplore.getState().getBoard());
-            int playoutResult = simulateRandomPlayout(nodeToExplore, aiStarts);
-            System.out.println("DK: " + playoutResult);
+            int playoutResult = simulateRandomPlayout(nodeToExplore);
+//            System.out.println("DK: " + playoutResult);
             if(aiStarts)
             	backPropogation(nodeToExplore, playoutResult == 1 ? PlayerType.AL : PlayerType.PLAYER);
             else
             	backPropogation(nodeToExplore, playoutResult == 1 ? PlayerType.PLAYER : PlayerType.AL);
         }
 
+		System.out.println("Playout: " + i);
         Node winnerNode = rootNode.getChildWithMaxScore();
         tree.setRoot(winnerNode);
+        print(winnerNode.getState().getBoard());
 //        return winnerNode.getState().getBoard();
 		
 		// Return the best move found
         
         bestMove[0] = winnerNode.getState().getWinScore();
-        bestMove[1] = winnerNode.getState().getBoard().getLastMove()[0];
-        bestMove[2] = winnerNode.getState().getBoard().getLastMove()[1];
+//        bestMove[1] = winnerNode.getState().getBoard().getLastMove()[0];
+//        bestMove[2] = winnerNode.getState().getBoard().getLastMove()[1];
+        int[] copy = getLastMove(winnerNode);
+        bestMove[1] = copy[0];
+        bestMove[2] = copy[1];
 		return bestMove;
 	}
-	
+
 	private void backPropogation(Node nodeToExplore, PlayerType playerType) {
 	    Node tempNode = nodeToExplore;
 	    while (tempNode != null) {
@@ -149,13 +166,13 @@ public class MCTS {
 	    }
 	}
 	
-	private int simulateRandomPlayout(Node node, boolean aiStarts) {
+	private int simulateRandomPlayout(Node node) {
 		Node tempNode = new Node(node);
 	    State tempState = tempNode.getState();
 //	    int boardStatus = tempState.getBoard().checkStatus();
 	    int boardStatus = Game.checkWinner(tempState.getBoard());
 	    // 0 chưa kết luận, 1 máy thắng, 2 người chơi thắng
-	    if(boardStatus == (aiStarts ? 1 : 2)) {
+	    if(boardStatus == (aiStarts ? 2 : 1)) {
 	    	// nếu người chơi thắng thì không tính nước này nữa
 	    	tempNode.getParent().getState().setWinScore(Integer.MIN_VALUE);
 	    	return boardStatus;
@@ -165,16 +182,29 @@ public class MCTS {
 //	        tempNode.getParent().getState().setWinScore(Integer.MIN_VALUE);
 //	        return boardStatus;
 //	    }
-//	    Scanner reader = new Scanner(System.in);
+	    Scanner reader = new Scanner(System.in);
+	    int turnCount = 1;
 	    boolean filled = false;
-	    while (boardStatus == 0) {
+	    
+//	    print(tempNode.getState().getBoard());
+	    tempState.togglePlayer();
+	    
+	    moveCount = 3 - moveCount;
+	    while (boardStatus == 0) {	    	
 	    	filled = tempState.randomPlay();
 	    	if(filled == true)
 	    		break;
 //	    	print(tempState.getBoard());
 //	    	reader.nextLine();
 	    	boardStatus = Game.checkWinner(tempState.getBoard());
-	    	tempState.togglePlayer();
+//	    	System.out.println("movecount: " + moveCount);
+	    	
+	    	if(moveCount == 2) {
+	    		tempState.togglePlayer();
+	    		moveCount = 1;
+	    	} else {
+	    		moveCount++;
+	    	}
 	    }
 //	    while (boardStatus == Board.IN_PROGRESS) {
 //	        tempState.togglePlayer();
@@ -184,12 +214,16 @@ public class MCTS {
 	    return boardStatus;
 	}
 
-	private void expandNode(Node node) {
+	private void expandNode(Node node, boolean isFirst) {
+//		System.out.println("isfirst: " + isFirst);
 		List<State> possibleStates = node.getState().getAllPossibleStates();
 	    possibleStates.forEach(state -> {
 	        Node newNode = new Node(state);
 	        newNode.setParent(node);
-	        newNode.getState().setPlayerType(node.getState().getOpponent());
+	        if(isFirst || moveCount == 2)
+	        	newNode.getState().setPlayerType(node.getState().getOpponent());
+	        else
+	        	newNode.getState().setPlayerType(node.getState().getPlayerType());
 	        node.getChildArray().add(newNode);
 	    });
 	}
@@ -205,14 +239,28 @@ public class MCTS {
 	private void print(Board board2) {
 		for(int i = 0; i < board2.getBoardSize(); i++) {
 			for(int j = 0; j < board2.getBoardSize(); j++) {
-				System.out.print(board2.getBoardMatrix()[i][j] + " ");
+				int b = board2.getBoardMatrix()[i][j];
+				System.out.print((b != 0 ? b : "_") + " ");
 			}
 			System.out.println();
 		}
 	}
+	
+	private int[] getLastMove(Node winnerNode) {
+		int[] r = new int[2];
+		for(int i = 0; i < board.getBoardSize(); i++) {
+			for(int j = 0; j < board.getBoardSize(); j++) {
+				if(board.getBoardMatrix()[i][j] != winnerNode.getState().getBoard().getBoardMatrix()[i][j]) {
+					r[0] = i;
+					r[1] = j;
+				}
+			}
+		}
+		return r;
+	}
 
 	// This function looks for a move that can instantly win the game.
-	private static Object[] searchWinningMove(Board board) {
+	private Object[] searchWinningMove(Board board) {
 		ArrayList<int[]> allPossibleMoves = board.generateMoves();
 		Object[] winningMove = new Object[3];
 		
@@ -222,10 +270,10 @@ public class MCTS {
 			// Create a temporary board that is equivalent to the current board
 			Board dummyBoard = new Board(board);
 			// Play the move on that temporary board without drawing anything
-			dummyBoard.addStoneNoGUI(move[1], move[0], false);
+			dummyBoard.addStoneNoGUI(move[1], move[0], !aiStarts);
 			
 			// If the white player has a winning score in that temporary board, return the move.
-			if(getScore(dummyBoard,false,false) >= WIN_SCORE) {
+			if(getScore(dummyBoard,aiStarts,false) >= WIN_SCORE) {
 				winningMove[1] = move[0];
 				winningMove[2] = move[1];
 				return winningMove;
@@ -355,12 +403,12 @@ public class MCTS {
 		if(blocks == 2 && count < 6) return 0;
 
 		switch(count) {
-		case 6: {
-			return WIN_SCORE;
-		}
+//		case 6: {
+//			return WIN_SCORE;
+//		}
 		case 5: {
 			// 5 consecutive wins the game
-			if(currentTurn) return winGuarantee;
+			if(currentTurn) return WIN_SCORE;
 			else {
 				// Opponent's turn
 				// If neither side is blocked, 4 consecutive stones guarantees a win in the next turn.

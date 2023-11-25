@@ -62,9 +62,15 @@ public class BoardGUI extends JPanel {
 	public Dimension getPreferredSize() {
 		return new Dimension(sideLength, sideLength);
 	}
-	public void printWinner(int winner) {
+	public void printWinner(int winner, boolean aiStarts) {
 		FontMetrics metrics = g2D.getFontMetrics(g2D.getFont());
-		String text = winner == 2 ? "YOU WON!" : (winner == 1 ? "COMPUTER WON!" : "TIED!");
+		
+		String text;
+		if(aiStarts)
+			text = winner == 2 ? "YOU WON!" : (winner == 1 ? "COMPUTER WON!" : "TIED!");
+		else
+			text = winner == 1 ? "YOU WON!" : (winner == 2 ? "COMPUTER WON!" : "TIED!");
+		
 		
 		
 		g2D.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,

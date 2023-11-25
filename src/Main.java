@@ -34,7 +34,7 @@ public class Main {
 				int depth = (Integer)(settings[0]);
 				boolean computerStarts = (Boolean)(settings[1]);
 				
-				System.out.println("Depth: " + depth + " AI Makes the first move: " + computerStarts );
+//				System.out.println("Depth: " + depth + " AI Makes the first move: " + computerStarts );
 				
 				// Make the game board visible to the user.
 				gui.showBoard();

@@ -8,13 +8,10 @@ public class State {
 	int visitCount;
 	double winScore;
 
-	public State() {
-	}
 
-	public State(Board board, int visitCount, double winScore) {
+	public State(Board board, PlayerType playerType) {
 		this.board = board;
-		this.visitCount = visitCount;
-		this.winScore = winScore;
+		this.playerType = playerType;
 	}
 
 	public State(State state) {
@@ -22,6 +19,15 @@ public class State {
 		this.visitCount = state.getVisitCount();
 		this.winScore = state.getWinScore();
 		this.board = new Board(state.board);
+	}
+
+	public State() {
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public String toString() {
+		return "State [playerType=" + playerType + ", visitCount=" + visitCount + ", winScore=" + winScore + "]";
 	}
 
 	public List<State> getAllPossibleStates() {
@@ -32,8 +38,10 @@ public class State {
 				continue;
 			}
 			//dummyBoard.setLastMove(state);
-			dummyBoard.addStoneNoGUI(state[0], state[1], playerType != PlayerType.PLAYER);
-			states.add(new State(dummyBoard, visitCount, winScore));
+			dummyBoard.addStoneNoGUI(state[0], state[1], playerType == PlayerType.PLAYER);
+		
+			states.add(new State(dummyBoard, playerType));
+			
 			dummyBoard = new Board(board);
 		}
 		return states;

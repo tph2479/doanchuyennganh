@@ -136,7 +136,7 @@ public class Game {
 			}
 
 			// Place a black stone to the found cell.
-			playMove(aiMove[1], aiMove[0], !aiStarts);
+			playMove(aiMove[0], aiMove[1], !aiStarts);
 
 			// System.out.println("Black: " + MCTS.getScore(board,true,true) + " White: " +
 			// MCTS.getScore(board,false,true));
@@ -160,7 +160,8 @@ public class Game {
 
 			if (isFirst) {
 				isFirst = false;
-				return;
+				if(!aiStarts)
+					return;
 			}
 
 			// NƯỚC ĐÁNH THỨ 2
@@ -214,6 +215,10 @@ public class Game {
 	}
 
 	private boolean playMove(int posX, int posY, boolean black) {
-		return board.addStone(posX, posY, black);
+		boolean ret = board.addStone(posX, posY, black);
+		if(ret) {
+			ai.setBoard(board);
+		}
+		return ret; 
 	}
 }

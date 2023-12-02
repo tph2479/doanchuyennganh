@@ -49,6 +49,17 @@ public class Node {
 	}
 
 	public Node getChildWithMaxScore() {
-		return UCT.findBestNodeWithUCT(this);
+		if(childArray.size() == 0)
+			return null;
+		Node node = childArray.get(0);
+		for(int i = 1; i < childArray.size(); i++)
+			if(node.getState().getWinScore() < childArray.get(i).getState().getWinScore())
+				node = childArray.get(i);
+		return node;
+	}
+
+	@Override
+	public String toString() {
+		return "Node [state=" + state + "]";
 	}
 }

@@ -21,6 +21,7 @@ public class MCTS {
 	// Win score should be greater than all possible board scores
 	private static final int WIN_SCORE = 100_000_000;
 	private int moveCount = 1;
+	private boolean isFirst = true;
 
 	// Constructor
 	public MCTS(Board board, boolean aiStarts) {
@@ -70,11 +71,11 @@ public class MCTS {
 	}
 
 	// This function is used to get the next intelligent move to make for the AI.
-	public int[] calculateNextMove(int moveCount, boolean isFirst) {
+	public int[] calculateNextMove(boolean isFirst) {
 		// Block the board for AI to make a decision.
 		board.thinkingStarted();
 
-		int[] move = new int[2];
+		int[] move = new int[4];
 
 		// Used for benchmarking purposes only.
 //		long startTime = System.currentTimeMillis();
@@ -82,23 +83,26 @@ public class MCTS {
 		// Check if any available move can finish the game to make sure the AI always
 		// takes the opportunity to finish the game.
 		// NOTE: sửa lại chỗ này thành kiểm tra cho connect6 (2 bước liên tiến)
-		Object[] bestMove = searchWinningMove(board);
-
-		if (bestMove != null) {
-			// Finishing move is found.
+//		Object[] bestMove = searchWinningMove(board);
+		Object[] bestMove = null;
+//
+//		if (bestMove != null) {
+//			// Finishing move is found.
+//			move[0] = (Integer) (bestMove[1]);
+//			move[1] = (Integer) (bestMove[2]);
+//		} else {
+//			// If there is no such move, search the MCTS tree with specified depth.
+//			this.moveCount = moveCount;
+		bestMove = MCTSSearch();
+		if (bestMove[1] == null) {
+			move = null;
+		} else {
 			move[0] = (Integer) (bestMove[1]);
 			move[1] = (Integer) (bestMove[2]);
-		} else {
-			// If there is no such move, search the MCTS tree with specified depth.
-			this.moveCount = moveCount;
-			bestMove = MCTSSearch(isFirst);
-			if (bestMove[1] == null) {
-				move = null;
-			} else {
-				move[0] = (Integer) (bestMove[1]);
-				move[1] = (Integer) (bestMove[2]);
-			}
+			move[2] = (Integer) (bestMove[4]);
+			move[3] = (Integer) (bestMove[5]);
 		}
+//		}
 //		System.out.println("Cases calculated: " + evaluationCount + " Calculation time: " + (System.currentTimeMillis() - startTime) + " ms");
 		board.thinkingFinished();
 
@@ -110,8 +114,8 @@ public class MCTS {
 	/*
 	 * returns: {score, move[0], move[1]}
 	 */
-	private Object[] MCTSSearch(boolean isFirst) {
-		Object[] bestMove = { 0, null, null };
+	private Object[] MCTSSearch() {
+		Object[] bestMove = { 0, null, null, 0, null, null };
 
 		Tree tree = new Tree();
 		Node rootNode = tree.getRoot();
@@ -123,10 +127,11 @@ public class MCTS {
 
 		long end = System.currentTimeMillis() + 2000;
 		int i = 0, j = 50;
-		Scanner in = new Scanner(System.in);
+//		Scanner in = new Scanner(System.in);
 		int playoutResult = 0;
-		while (j-- > 0) {
-//		while (System.currentTimeMillis() < end) {
+		moveCount++;
+//		while (j-- > 0) {
+		while (System.currentTimeMillis() < end) {
 			i++;
 //        while (i-- > 0) {
 			Node promisingNode = selectPromisingNode(rootNode);
@@ -135,8 +140,7 @@ public class MCTS {
 //            System.out.println("DEBUG UCT: " + UCT.uctValue(1, 0, 1));
 //            if (promisingNode.getState().getBoard().checkStatus()
 //              == Board.IN_PROGRESS) {
-			expandNode(promisingNode, isFirst);
-			isFirst = false;
+			expandNode(promisingNode);
 //            }
 
 //            print(promisingNode.getState().getBoard());
@@ -161,11 +165,16 @@ public class MCTS {
 		// Return the best move found
 
 		bestMove[0] = winnerNode.getState().getWinScore();
-//        bestMove[1] = winnerNode.getState().getBoard().getLastMove()[0];
-//        bestMove[2] = winnerNode.getState().getBoard().getLastMove()[1];
-		int[] copy = getLastMove(winnerNode);
-		bestMove[1] = copy[0];
-		bestMove[2] = copy[1];
+		bestMove[1] = winnerNode.getState().getBoard().getLastMove()[0];
+		bestMove[2] = winnerNode.getState().getBoard().getLastMove()[1];
+
+		Node secondWinnerNode = winnerNode.getChildWithMaxScore();
+		bestMove[3] = secondWinnerNode.getState().getWinScore();
+		bestMove[4] = secondWinnerNode.getState().getBoard().getLastMove()[0];
+		bestMove[5] = secondWinnerNode.getState().getBoard().getLastMove()[1];
+//		int[] copy = getLastMove(winnerNode);
+//		bestMove[1] = copy[0];
+//		bestMove[2] = copy[1];
 		return bestMove;
 	}
 
@@ -207,14 +216,19 @@ public class MCTS {
 //	    print(tempNode.getState().getBoard());
 //		tempState.togglePlayer();
 
-		if (moveCount < 3)
-			moveCount = 3 - moveCount;
+//		if (moveCount < 3) {
+//			turnCount = 3 - moveCount;
+//		}
+
+		if (node.parent != null && node.parent.parent != null && node.getState().getPlayerType() == PlayerType.AL)
+			turnCount = 2;
+
 		while (boardStatus == 0) {
-			if (moveCount >= 2) {
+			if (turnCount >= 2) {
 				tempState.togglePlayer();
-				moveCount = 1;
+				turnCount = 1;
 			} else {
-				moveCount++;
+				turnCount++;
 			}
 
 			filled = tempState.randomPlay();
@@ -223,7 +237,7 @@ public class MCTS {
 
 			boardStatus = Game.checkWinner(tempState.getBoard());
 
-			print(tempState.getBoard());
+//			print(tempState.getBoard());
 //	    	reader.nextLine();
 //	    	System.out.println("movecount: " + moveCount);
 		}
@@ -236,13 +250,22 @@ public class MCTS {
 		return boardStatus;
 	}
 
-	private void expandNode(Node node, boolean isFirst) {
+	private void expandNode(Node node) {
 		boolean sw = false;
 //		System.out.println("isfirst: " + isFirst);
-		if ((isFirst && node.parent == null) || (node.parent != null && node.parent.parent != null
-				&& node.parent.getState().getPlayerType() == node.parent.getState().getPlayerType())) {
+//		if ((isFirst && node.parent == null) || (node.parent != null && node.parent.parent != null
+//				&& node.parent.getState().getPlayerType() == node.parent.getState().getPlayerType())) {
+//			node.state.togglePlayer();
+//			sw = true;
+//		}
+
+//		moveCount++;
+
+		if (isFirst || node.parent == null || (node.parent.parent != null
+				&& node.getState().getPlayerType() == node.parent.getState().getPlayerType())) {
 			node.state.togglePlayer();
 			sw = true;
+			isFirst = false;
 		}
 
 		List<State> possibleStates = node.getState().getAllPossibleStates();
@@ -255,8 +278,6 @@ public class MCTS {
 
 		if (sw)
 			node.state.togglePlayer();
-
-		moveCount++;
 	}
 
 	private Node selectPromisingNode(Node rootNode) {

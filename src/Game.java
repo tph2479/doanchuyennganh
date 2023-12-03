@@ -132,7 +132,7 @@ public class Game {
 			turnCount = 1; // switch turn
 
 			// Make the AI instance calculate a move.
-			int[] aiMove = ai.calculateNextMove(1, isFirst);
+			int[] aiMove = ai.calculateNextMove(isFirst);
 
 			if (aiMove == null) {
 //				System.out.println("No possible moves left. Game Over.");
@@ -142,7 +142,8 @@ public class Game {
 			}
 
 			// Place a black stone to the found cell.
-			playMove(aiMove[0], aiMove[1], !aiStarts);
+			playMove(aiMove[1], aiMove[0], !aiStarts);
+			
 
 			// System.out.println("Black: " + MCTS.getScore(board,true,true) + " White: " +
 			// MCTS.getScore(board,false,true));
@@ -157,52 +158,54 @@ public class Game {
 				return;
 			}
 
-			if (board.generateMoves().size() == 0) {
-//				System.out.println("No possible moves left. Game Over.");
-				board.printWinner(0, false); // Prints "TIED!"
-				gameFinished = true;
-				return;
-			}
-
 			if (isFirst) {
 				isFirst = false;
 				if (!aiStarts)
 					return;
 			}
-
-			// NƯỚC ĐÁNH THỨ 2
-			// Make the AI instance calculate a move.
-			int[] aiMove2 = ai.calculateNextMove(2, false);
-
-			if (aiMove2 == null) {
+			
+			playMove(aiMove[3], aiMove[2], !aiStarts);
+			
+			if (board.generateMoves().size() == 0) {
 //				System.out.println("No possible moves left. Game Over.");
 				board.printWinner(0, false); // Prints "TIED!"
 				gameFinished = true;
 				return;
 			}
 
+			// NƯỚC ĐÁNH THỨ 2
+			// Make the AI instance calculate a move.
+//			int[] aiMove2 = ai.calculateNextMove(2, false);
+
+//			if (aiMove2 == null) {
+////				System.out.println("No possible moves left. Game Over.");
+//				board.printWinner(0, false); // Prints "TIED!"
+//				gameFinished = true;
+//				return;
+//			}
+
 			// Place a black stone to the found cell.
-			playMove(aiMove2[1], aiMove2[0], !aiStarts);
+//			playMove(aiMove2[1], aiMove2[0], !aiStarts);
 
 			// System.out.println("Black: " + MCTS.getScore(board,true,true) + " White: " +
 			// MCTS.getScore(board,false,true));
 
 			// kiểm tra nước thứ 2 máy đánh có thắng không
-			winner = checkWinner(board);
-
-			if (winner == (aiStarts ? 1 : 2)) {
-//				System.out.println("AI WON!");
-				board.printWinner(winner, aiStarts);
-				gameFinished = true;
-				return;
-			}
-
-			if (board.generateMoves().size() == 0) {
-//				System.out.println("No possible moves left. Game Over.");
-				board.printWinner(0, aiStarts); // Prints "TIED!"
-				gameFinished = true;
-				return;
-			}
+//			winner = checkWinner(board);
+//
+//			if (winner == (aiStarts ? 1 : 2)) {
+////				System.out.println("AI WON!");
+//				board.printWinner(winner, aiStarts);
+//				gameFinished = true;
+//				return;
+//			}
+//
+//			if (board.generateMoves().size() == 0) {
+////				System.out.println("No possible moves left. Game Over.");
+//				board.printWinner(0, aiStarts); // Prints "TIED!"
+//				gameFinished = true;
+//				return;
+//			}
 
 			isPlayersTurn = true;
 		}

@@ -56,7 +56,7 @@ public class Node {
 			return null;
 		Node node = childArray.get(0);
 		for (int i = 1; i < childArray.size(); i++)
-			if (node.getState().getWinScore() < childArray.get(i).getState().getWinScore())
+			if (node.getState().getVisitCount() < childArray.get(i).getState().getVisitCount())
 				node = childArray.get(i);
 		return node;
 	}

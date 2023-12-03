@@ -36,7 +36,7 @@ public class State {
 //			if (dummyBoard.getBoardMatrix()[state[1]][state[0]] != 0) {
 //				continue;
 //			}
-			// dummyBoard.setLastMove(state);
+			dummyBoard.setLastMove(state);
 			dummyBoard.addStoneNoGUI(state[1], state[0], playerType == PlayerType.PLAYER);
 
 			states.add(new State(dummyBoard, playerType));

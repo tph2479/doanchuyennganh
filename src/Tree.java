@@ -1,11 +1,11 @@
 
 public class Tree {
 	Node root;
-	
+
 	public Tree() {
 		root = new Node();
 	}
-	
+
 	public Node getRoot() {
 		return root;
 	}
@@ -13,5 +13,5 @@ public class Tree {
 	public void setRoot(Node root) {
 		this.root = root;
 	}
-	
+
 }

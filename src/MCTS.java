@@ -8,6 +8,7 @@ public class MCTS {
 	public static int evaluationCount = 0;
 	// Board instance is responsible for board mechanics
 	private Board board;
+
 	public Board getBoard() {
 		return board;
 	}
@@ -120,7 +121,7 @@ public class MCTS {
 		// nếu ai đánh trước thì board là người chơi
 		// nếu ai đánh sau thì board là người chơi
 
-		long end = System.currentTimeMillis() + 1000;
+		long end = System.currentTimeMillis() + 2000;
 		int i = 0, j = 50;
 		Scanner in = new Scanner(System.in);
 		int playoutResult = 0;
@@ -132,7 +133,7 @@ public class MCTS {
 
 //            print(promisingNode.getState().getBoard());
 //            System.out.println("DEBUG UCT: " + UCT.uctValue(1, 0, 1));
-//            if (promisingNode.getState().getBoard().checkStatus() 
+//            if (promisingNode.getState().getBoard().checkStatus()
 //              == Board.IN_PROGRESS) {
 			expandNode(promisingNode, isFirst);
 			isFirst = false;
@@ -146,8 +147,8 @@ public class MCTS {
 				nodeToExplore = promisingNode.getRandomChildNode();
 			}
 //            print(nodeToExplore.getState().getBoard());
-			 playoutResult = simulateRandomPlayout(nodeToExplore);
-			 backPropogation(nodeToExplore, playoutResult);
+			playoutResult = simulateRandomPlayout(nodeToExplore);
+			backPropogation(nodeToExplore, playoutResult);
 //			print(nodeToExplore.getState().getBoard());
 		}
 
@@ -173,9 +174,9 @@ public class MCTS {
 		while (tempNode != null) {
 			tempNode.getState().incrementVisit();
 			if (tempNode.getState().getPlayerType() == (aiStarts ? PlayerType.AL : PlayerType.PLAYER)) {
-				if(aiStarts && playoutResult == 1) {
+				if (aiStarts && playoutResult == 1) {
 					tempNode.getState().addWinScore(1);
-				} else if (!aiStarts && playoutResult == 2){
+				} else if (!aiStarts && playoutResult == 2) {
 					tempNode.getState().addWinScore(1);
 				}
 			}
@@ -206,7 +207,7 @@ public class MCTS {
 //	    print(tempNode.getState().getBoard());
 //		tempState.togglePlayer();
 
-		if(moveCount < 3)
+		if (moveCount < 3)
 			moveCount = 3 - moveCount;
 		while (boardStatus == 0) {
 			if (moveCount >= 2) {
@@ -215,18 +216,18 @@ public class MCTS {
 			} else {
 				moveCount++;
 			}
-			
+
 			filled = tempState.randomPlay();
-			if (filled == true)
+			if (filled)
 				break;
-	    	
-	    	
+
 			boardStatus = Game.checkWinner(tempState.getBoard());
+
+			print(tempState.getBoard());
+//	    	reader.nextLine();
 //	    	System.out.println("movecount: " + moveCount);
 		}
-//		print(tempState.getBoard());
 //		System.out.println(boardStatus);
-//    	reader.nextLine();
 //	    while (boardStatus == Board.IN_PROGRESS) {
 //	        tempState.togglePlayer();
 //	        tempState.randomPlay();
@@ -238,9 +239,8 @@ public class MCTS {
 	private void expandNode(Node node, boolean isFirst) {
 		boolean sw = false;
 //		System.out.println("isfirst: " + isFirst);
-		if((isFirst && node.parent == null) ||
-				(node.parent != null && node.parent.parent != null &&
-				node.parent.getState().getPlayerType() == node.parent.getState().getPlayerType())) {
+		if ((isFirst && node.parent == null) || (node.parent != null && node.parent.parent != null
+				&& node.parent.getState().getPlayerType() == node.parent.getState().getPlayerType())) {
 			node.state.togglePlayer();
 			sw = true;
 		}
@@ -252,10 +252,10 @@ public class MCTS {
 			newNode.setParent(node);
 			node.getChildArray().add(newNode);
 		});
-		
-		if(sw)
+
+		if (sw)
 			node.state.togglePlayer();
-		
+
 		moveCount++;
 	}
 
@@ -307,7 +307,7 @@ public class MCTS {
 
 			// If the white player has a winning score in that temporary board, return the
 			// move.
-			if (getScore(dummyBoard, aiStarts, false) >= WIN_SCORE) {
+			if (Game.checkWinner(dummyBoard) != 0) {
 				winningMove[1] = move[0];
 				winningMove[2] = move[1];
 				return winningMove;

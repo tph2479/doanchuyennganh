@@ -33,6 +33,7 @@ public class Game {
 		// Make the board start listening for mouse clicks.
 		board.startListening(new MouseListener() {
 
+			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				if (isPlayersTurn) {
 					isPlayersTurn = false;
@@ -43,21 +44,25 @@ public class Game {
 				}
 			}
 
+			@Override
 			public void mouseEntered(MouseEvent arg0) {
 				// TODO Auto-generated method stub
 
 			}
 
+			@Override
 			public void mouseExited(MouseEvent arg0) {
 				// TODO Auto-generated method stub
 
 			}
 
+			@Override
 			public void mousePressed(MouseEvent arg0) {
 				// TODO Auto-generated method stub
 
 			}
 
+			@Override
 			public void mouseReleased(MouseEvent arg0) {
 				// TODO Auto-generated method stub
 
@@ -87,6 +92,7 @@ public class Game {
 			this.e = e;
 		}
 
+		@Override
 		public void run() {
 			if (gameFinished)
 				return;
@@ -160,7 +166,7 @@ public class Game {
 
 			if (isFirst) {
 				isFirst = false;
-				if(!aiStarts)
+				if (!aiStarts)
 					return;
 			}
 
@@ -216,9 +222,9 @@ public class Game {
 
 	private boolean playMove(int posX, int posY, boolean black) {
 		boolean ret = board.addStone(posX, posY, black);
-		if(ret) {
+		if (ret) {
 			ai.setBoard(board);
 		}
-		return ret; 
+		return ret;
 	}
 }

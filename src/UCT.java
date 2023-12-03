@@ -6,8 +6,8 @@ public class UCT {
 		if (nodeVisit == 0) {
 			return Integer.MAX_VALUE;
 		}
-		double value = ((double)nodeWinScore / (double)nodeVisit)
-				+ 1.41 * Math.sqrt(Math.log((double)totalVisit) / (double)nodeVisit); 
+		double value = (nodeWinScore / nodeVisit)
+				+ 1.41 * Math.sqrt(Math.log(totalVisit) / nodeVisit);
 		return value;
 	}
 

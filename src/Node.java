@@ -1,23 +1,21 @@
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Node {
 	State state;
 	Node parent;
-    List<Node> childArray;
-    
-    public Node() {
-    	state = new State();
-    	childArray = new ArrayList<>();
-    }
-    
-    public Node(State state) {
-    	this.state = state;
-    	childArray = new ArrayList<>();
-    }
+	List<Node> childArray;
+
+	public Node() {
+		state = new State();
+		childArray = new ArrayList<>();
+	}
+
+	public Node(State state) {
+		this.state = state;
+		childArray = new ArrayList<>();
+	}
 
 	public Node(Node node) {
 		this.parent = node.getParent();
@@ -28,18 +26,23 @@ public class Node {
 	public State getState() {
 		return state;
 	}
+
 	public void setState(State state) {
 		this.state = state;
 	}
+
 	public Node getParent() {
 		return parent;
 	}
+
 	public void setParent(Node parent) {
 		this.parent = parent;
 	}
+
 	public List<Node> getChildArray() {
 		return childArray;
 	}
+
 	public void setChildArray(List<Node> childArray) {
 		this.childArray = childArray;
 	}
@@ -49,11 +52,11 @@ public class Node {
 	}
 
 	public Node getChildWithMaxScore() {
-		if(childArray.size() == 0)
+		if (childArray.size() == 0)
 			return null;
 		Node node = childArray.get(0);
-		for(int i = 1; i < childArray.size(); i++)
-			if(node.getState().getWinScore() < childArray.get(i).getState().getWinScore())
+		for (int i = 1; i < childArray.size(); i++)
+			if (node.getState().getWinScore() < childArray.get(i).getState().getWinScore())
 				node = childArray.get(i);
 		return node;
 	}
